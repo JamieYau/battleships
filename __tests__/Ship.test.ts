@@ -39,4 +39,18 @@ describe("Ship Factory Function", () => {
     ship.hit(); // This hit should not increase hits beyond 3
     expect(ship.hits).toBe(3);
   });
+
+  it("should create a ship of length 1", () => {
+    const ship = createShip(1);
+    expect(ship.length).toBe(1);
+    expect(ship.hits).toBe(0);
+    expect(ship.isSunk()).toBe(false);
+  });
+
+  it("should create a ship of length 0", () => {
+    const ship = createShip(0);
+    expect(ship.length).toBe(0);
+    expect(ship.hits).toBe(0);
+    expect(ship.isSunk()).toBe(true);
+  });
 });
