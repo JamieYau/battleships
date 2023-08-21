@@ -12,6 +12,7 @@ export default function createShip(length: number): Ship {
     hits: 0,
     sunk: false,
     hit: function () {
+      if (this.hits >= this.length) return;
       this.hits++;
     },
     isSunk: function () {
