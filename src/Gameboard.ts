@@ -1,4 +1,5 @@
 import Ship from "./Ship";
+import { OutOfBoundsError, OverlapError } from "./Error";
 
 interface Cell {
   hasShip: boolean;
@@ -22,12 +23,13 @@ export default class Gameboard {
     return this.#board;
   }
 
-  placeShip(
+  isValidPlacement(
     ship: Ship,
     row: number,
     col: number,
     direction: "horizontal" | "vertical"
   ) {
+    // Check for out-of-bounds placement
     if (
       row < 0 ||
       col < 0 ||
@@ -36,23 +38,35 @@ export default class Gameboard {
       (direction === "vertical" && row + ship.length > this.#boardSize) ||
       (direction === "horizontal" && col + ship.length > this.#boardSize)
     ) {
-      throw new Error("Ship placement is out of bounds.");
+      throw new OutOfBoundsError();
     }
-    // Check if ship overlaps with another ship
+
+    // Check for ship overlap
     if (
       direction === "horizontal" &&
       this.#board[row]
         .slice(col, col + ship.length)
         .some((cell) => cell.hasShip)
     ) {
-      throw new Error("Ship placement overlaps with another ship.");
-    } else {
+      throw new OverlapError();
+    } else if (direction === "vertical") {
       for (let i = 0; i < ship.length; i++) {
         if (this.#board[row + i][col].hasShip) {
-          throw new Error("Ship placement overlaps with another ship.");
+          throw new OverlapError();
         }
       }
     }
+
+    return true;
+  }
+
+  placeShip(
+    ship: Ship,
+    row: number,
+    col: number,
+    direction: "horizontal" | "vertical"
+  ) {
+    if (!this.isValidPlacement(ship, row, col, direction)) return;
 
     if (direction === "horizontal") {
       for (let i = 0; i < ship.length; i++) {
