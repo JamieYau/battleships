@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import Gameboard from "../src/Gameboard";
 import Ship from "../src/Ship";
+import { OutOfBoundsError, OverlapError } from "../src/Error";
 
 describe("Gameboard Class", () => {
   let gameboard: Gameboard;
@@ -55,19 +56,17 @@ describe("Gameboard Class", () => {
 
       it("allows placing multiple ships without overlap", () => {
         const ship1 = new Ship(4);
-        const ship2 = new Ship(3);
+        const ship2 = new Ship(1);
 
         gameboard.placeShip(ship1, 0, 0, "horizontal");
-        gameboard.placeShip(ship2, 1, 0, "vertical");
+        gameboard.placeShip(ship2, 2, 0, "vertical");
 
         const expectedPositions = [
           [0, 0],
           [0, 1],
           [0, 2],
           [0, 3],
-          [1, 0],
-          [2, 0],
-          [3, 0],
+          [2, 0]
         ];
 
         gameboard.board.forEach((row, rowIndex) => {
@@ -89,13 +88,13 @@ describe("Gameboard Class", () => {
       it("throws an error if a horizontal ship is placed outside the board", () => {
         const ship = new Ship(2);
 
-        expect(() => gameboard.placeShip(ship, 0, 9, "horizontal")).toThrow();
+        expect(() => gameboard.placeShip(ship, 0, 9, "horizontal")).toThrowError(OutOfBoundsError);
       });
 
       it("throws an error if a vertical ship is placed outside the board", () => {
         const ship = new Ship(2);
 
-        expect(() => gameboard.placeShip(ship, 9, 0, "vertical")).toThrow();
+        expect(() => gameboard.placeShip(ship, 9, 0, "vertical")).toThrowError(OutOfBoundsError);
       });
     });
     describe("ship overlap", () => {
@@ -106,7 +105,7 @@ describe("Gameboard Class", () => {
         const newShip = new Ship(5);
         expect(() =>
           gameboard.placeShip(newShip, 0, 0, "horizontal")
-        ).toThrow();
+        ).toThrowError(OverlapError);
       });
 
       it("throws an error if a vertical ship is placed on top of another ship", () => {
@@ -114,7 +113,7 @@ describe("Gameboard Class", () => {
         gameboard.placeShip(ship, 0, 0, "vertical");
 
         const newShip = new Ship(5);
-        expect(() => gameboard.placeShip(newShip, 0, 0, "vertical")).toThrow();
+        expect(() => gameboard.placeShip(newShip, 0, 0, "vertical")).toThrowError(OverlapError);
       });
     });
   });

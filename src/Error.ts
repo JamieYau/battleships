@@ -12,4 +12,11 @@ class OverlapError extends Error {
   }
 }
 
-export { OutOfBoundsError, OverlapError };
+class AdjacentError extends Error {
+  constructor() {
+    super("Ships cannot be placed adjacent to each other.");
+    this.name = "AdjacentError";
+  }
+}
+
+export { OutOfBoundsError, OverlapError, AdjacentError };
