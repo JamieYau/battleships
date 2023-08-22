@@ -11,7 +11,10 @@ export default class Gameboard {
 
   constructor() {
     this.#board = Array.from({ length: 10 }, () =>
-      Array(10).fill({ hasShip: false, state: "no attempt" })
+      Array.from({ length: 10 }, () => ({
+        hasShip: false,
+        state: "no attempt",
+      }))
     );
   }
 
@@ -43,6 +46,12 @@ export default class Gameboard {
         .some((cell) => cell.hasShip)
     ) {
       throw new Error("Ship placement overlaps with another ship.");
+    } else {
+      for (let i = 0; i < ship.length; i++) {
+        if (this.#board[row + i][col].hasShip) {
+          throw new Error("Ship placement overlaps with another ship.");
+        }
+      }
     }
 
     if (direction === "horizontal") {

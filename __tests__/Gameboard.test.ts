@@ -27,20 +27,62 @@ describe("Gameboard Class", () => {
     describe("valid placement", () => {
       it("places a horizontal ship on the board", () => {
         const ship = new Ship(2);
-
         gameboard.placeShip(ship, 0, 0, "horizontal");
-
-        expect(gameboard.board[0][0].hasShip).toBe(true);
-        expect(gameboard.board[0][1].hasShip).toBe(true);
+        gameboard.board.forEach((row, rowIndex) => {
+          row.forEach((cell, colIndex) => {
+            if (rowIndex === 0 && (colIndex === 0 || colIndex === 1)) {
+              expect(cell.hasShip).toBe(true);
+            } else {
+              expect(cell.hasShip).toBe(false);
+            }
+          });
+        });
       });
 
       it("places a vertical ship on the board", () => {
         const ship = new Ship(2);
-
         gameboard.placeShip(ship, 0, 0, "vertical");
+        gameboard.board.forEach((row, rowIndex) => {
+          row.forEach((cell, colIndex) => {
+            if (colIndex === 0 && (rowIndex === 0 || rowIndex === 1)) {
+              expect(cell.hasShip).toBe(true);
+            } else {
+              expect(cell.hasShip).toBe(false);
+            }
+          });
+        });
+      });
 
-        expect(gameboard.board[0][0].hasShip).toBe(true);
-        expect(gameboard.board[1][0].hasShip).toBe(true);
+      it("allows placing multiple ships without overlap", () => {
+        const ship1 = new Ship(4);
+        const ship2 = new Ship(3);
+
+        gameboard.placeShip(ship1, 0, 0, "horizontal");
+        gameboard.placeShip(ship2, 1, 0, "vertical");
+
+        const expectedPositions = [
+          [0, 0],
+          [0, 1],
+          [0, 2],
+          [0, 3],
+          [1, 0],
+          [2, 0],
+          [3, 0],
+        ];
+
+        gameboard.board.forEach((row, rowIndex) => {
+          row.forEach((cell, colIndex) => {
+            if (
+              expectedPositions.some(
+                (pos) => pos[0] === rowIndex && pos[1] === colIndex
+              )
+            ) {
+              expect(cell.hasShip).toBe(true);
+            } else {
+              expect(cell.hasShip).toBe(false);
+            }
+          });
+        });
       });
     });
     describe("out of bounds", () => {
@@ -57,7 +99,7 @@ describe("Gameboard Class", () => {
       });
     });
     describe("ship overlap", () => {
-      it("throws an error if a ship is placed on top of another ship", () => {
+      it("throws an error if a horizontal ship is placed on top of another ship", () => {
         const ship = new Ship(2);
         gameboard.placeShip(ship, 0, 0, "horizontal");
 
@@ -65,6 +107,14 @@ describe("Gameboard Class", () => {
         expect(() =>
           gameboard.placeShip(newShip, 0, 0, "horizontal")
         ).toThrow();
+      });
+
+      it("throws an error if a vertical ship is placed on top of another ship", () => {
+        const ship = new Ship(2);
+        gameboard.placeShip(ship, 0, 0, "vertical");
+
+        const newShip = new Ship(5);
+        expect(() => gameboard.placeShip(newShip, 0, 0, "vertical")).toThrow();
       });
     });
   });
