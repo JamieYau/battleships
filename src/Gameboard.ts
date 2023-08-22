@@ -28,11 +28,13 @@ export default class Gameboard {
       if (col + ship.length > this.#boardSize) {
         throw new Error("Ship placement is out of bounds.");
       }
-
       for (let i = 0; i < ship.length; i++) {
         this.#board[row][col + i] = true;
       }
     } else {
+      if (row + ship.length > this.#boardSize) {
+        throw new Error("Ship placement is out of bounds.");
+      }
       for (let i = 0; i < ship.length; i++) {
         this.#board[row + i][col] = true;
       }

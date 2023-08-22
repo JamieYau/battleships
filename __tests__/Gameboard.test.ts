@@ -30,5 +30,12 @@ describe("Gameboard Class", () => {
 
       expect(() => gameboard.placeShip(ship, 0, 9, "horizontal")).toThrow();
     });
+
+    it("throws an error if a vertical ship is placed outside the board", () => {
+      const gameboard = new Gameboard();
+      const ship = new Ship(2);
+
+      expect(() => gameboard.placeShip(ship, 9, 0, "vertical")).toThrow();
+    });
   });
 });
