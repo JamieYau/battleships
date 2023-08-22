@@ -1,17 +1,18 @@
 import Ship from "./Ship";
 
+interface Cell {
+  hasShip: boolean;
+  state: "hit" | "miss" | "no attempt";
+}
+
 export default class Gameboard {
-  #board: boolean[][];
+  #board: Cell[][];
   #boardSize = 10;
 
   constructor() {
-    this.#board = [];
-    for (let i = 0; i < this.#boardSize; i++) {
-      this.#board[i] = [];
-      for (let j = 0; j < this.#boardSize; j++) {
-        this.#board[i][j] = false;
-      }
-    }
+    this.#board = Array.from({ length: 10 }, () =>
+      Array(10).fill({ hasShip: false, state: "no attempt" })
+    );
   }
 
   get board() {
@@ -24,19 +25,33 @@ export default class Gameboard {
     col: number,
     direction: "horizontal" | "vertical"
   ) {
+    if (
+      row < 0 ||
+      col < 0 ||
+      row >= this.#boardSize ||
+      col >= this.#boardSize ||
+      (direction === "vertical" && row + ship.length > this.#boardSize) ||
+      (direction === "horizontal" && col + ship.length > this.#boardSize)
+    ) {
+      throw new Error("Ship placement is out of bounds.");
+    }
+    // Check if ship overlaps with another ship
+    if (
+      direction === "horizontal" &&
+      this.#board[row]
+        .slice(col, col + ship.length)
+        .some((cell) => cell.hasShip)
+    ) {
+      throw new Error("Ship placement overlaps with another ship.");
+    }
+
     if (direction === "horizontal") {
-      if (col + ship.length > this.#boardSize) {
-        throw new Error("Ship placement is out of bounds.");
-      }
       for (let i = 0; i < ship.length; i++) {
-        this.#board[row][col + i] = true;
+        this.#board[row][col + i].hasShip = true;
       }
     } else {
-      if (row + ship.length > this.#boardSize) {
-        throw new Error("Ship placement is out of bounds.");
-      }
       for (let i = 0; i < ship.length; i++) {
-        this.#board[row + i][col] = true;
+        this.#board[row + i][col].hasShip = true;
       }
     }
   }
