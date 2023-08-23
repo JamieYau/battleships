@@ -142,4 +142,8 @@ export default class Gameboard {
       cell.state = "miss";
     }
   }
+
+  allSunk(): boolean {
+    return false;
+  }
 }

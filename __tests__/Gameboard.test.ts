@@ -197,4 +197,16 @@ describe("Gameboard Class", () => {
       });
     });
   });
+  describe("allSunk", () => {
+    it("returns false if not all ships are sunk", () => {
+      const ship1 = new Ship(2);
+      const ship2 = new Ship(3);
+      gameboard.placeShip(ship1, 0, 0, "horizontal");
+      gameboard.placeShip(ship2, 2, 0, "vertical");
+      gameboard.receiveAttack(0, 0);
+      gameboard.receiveAttack(0, 1);
+      gameboard.receiveAttack(1, 0);
+      expect(gameboard.allSunk()).toBe(false);
+    });
+  });
 });
