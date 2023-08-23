@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import Ship from "../src/Ship";
-import { ShipSizeError } from "../src/Error";
+import Ship from "../src/modules/Ship";
+import { ShipSizeError } from "../src/modules/Error";
 
 describe("Ship Factory Function", () => {
   it("should return a ship object with initial properties", () => {
