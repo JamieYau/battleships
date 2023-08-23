@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import Gameboard from "../src/Gameboard";
 import Ship from "../src/Ship";
-import { OutOfBoundsError, OverlapError } from "../src/Error";
+import { OutOfBoundsError, OverlapError, AdjacentError } from "../src/Error";
 
 describe("Gameboard Class", () => {
   let gameboard: Gameboard;
@@ -28,7 +28,9 @@ describe("Gameboard Class", () => {
     describe("valid placement", () => {
       it("places a horizontal ship on the board", () => {
         const ship = new Ship(2);
-        gameboard.placeShip(ship, 0, 0, "horizontal");
+        expect(() => {
+          gameboard.placeShip(ship, 0, 0, "horizontal");
+        }).not.toThrow(); // No errors should be thrown
         gameboard.board.forEach((row, rowIndex) => {
           row.forEach((cell, colIndex) => {
             if (rowIndex === 0 && (colIndex === 0 || colIndex === 1)) {
@@ -83,6 +85,15 @@ describe("Gameboard Class", () => {
           });
         });
       });
+
+      it("sets the ship's coordinates", () => {
+        const ship = new Ship(2);
+        gameboard.placeShip(ship, 0, 0, "horizontal");
+        expect(ship.coords).toEqual([
+          [0, 0],
+          [0, 1],
+        ]);
+      });
     });
     describe("out of bounds", () => {
       it("throws an error if a horizontal ship is placed outside the board", () => {
@@ -130,7 +141,7 @@ describe("Gameboard Class", () => {
         const newShip = new Ship(5);
         expect(() =>
           gameboard.placeShip(newShip, 1, 0, "horizontal")
-        ).toThrowError(OverlapError);
+        ).toThrowError(AdjacentError);
       });
 
       it("throws an error if a vertical ship is placed adjacent to another ship", () => {
@@ -140,7 +151,49 @@ describe("Gameboard Class", () => {
         const newShip = new Ship(5);
         expect(() =>
           gameboard.placeShip(newShip, 0, 1, "vertical")
-        ).toThrowError(OverlapError);
+        ).toThrowError(AdjacentError);
+      });
+
+      it("throws an error if a horizontal ship is placed diagonally adjacent to another ship", () => {
+        const ship = new Ship(2);
+        gameboard.placeShip(ship, 0, 0, "horizontal");
+
+        const newShip = new Ship(5);
+        expect(() =>
+          gameboard.placeShip(newShip, 1, 1, "horizontal")
+        ).toThrowError(AdjacentError);
+      });
+
+      it("throws an error if a vertical ship is placed diagonally adjacent to another ship", () => {
+        const ship = new Ship(2);
+        gameboard.placeShip(ship, 0, 0, "vertical");
+
+        const newShip = new Ship(5);
+        expect(() =>
+          gameboard.placeShip(newShip, 1, 1, "vertical")
+        ).toThrowError(AdjacentError);
+      });
+    });
+  });
+  describe("receiveAttack", () => {
+    describe("hit", () => {
+      it("marks a cell as miss", () => {
+        gameboard.receiveAttack(0, 0);
+        expect(gameboard.board[0][0].state).toBe("miss");
+      });
+
+      it("marks a cell as hit on a ship", () => {
+        const ship = new Ship(2);
+        gameboard.placeShip(ship, 0, 0, "horizontal");
+        gameboard.receiveAttack(0, 0);
+        expect(gameboard.board[0][0].state).toBe("hit");
+        expect(ship.hits).toBe(1);
+      });
+
+      it("doesn't change the state of a cell that has already been attacked", () => {
+        gameboard.receiveAttack(0, 0);
+        gameboard.receiveAttack(0, 0);
+        expect(gameboard.board[0][0].state).toBe("miss");
       });
     });
   });

@@ -1,5 +1,5 @@
 import Ship from "./Ship";
-import { OutOfBoundsError, OverlapError } from "./Error";
+import { AdjacentError, OutOfBoundsError, OverlapError } from "./Error";
 
 interface Cell {
   hasShip: boolean;
@@ -8,7 +8,8 @@ interface Cell {
 
 export default class Gameboard {
   #board: Cell[][];
-  #boardSize = 10;
+  static #BOARDSIZE = 10;
+  #ships: Ship[] = [];
 
   constructor() {
     this.#board = Array.from({ length: 10 }, () =>
@@ -17,6 +18,7 @@ export default class Gameboard {
         state: "no attempt",
       }))
     );
+    this.#ships = [];
   }
 
   get board() {
@@ -33,10 +35,10 @@ export default class Gameboard {
     if (
       row < 0 ||
       col < 0 ||
-      row >= this.#boardSize ||
-      col >= this.#boardSize ||
-      (direction === "vertical" && row + ship.length > this.#boardSize) ||
-      (direction === "horizontal" && col + ship.length > this.#boardSize)
+      row >= Gameboard.#BOARDSIZE ||
+      col >= Gameboard.#BOARDSIZE ||
+      (direction === "vertical" && row + ship.length > Gameboard.#BOARDSIZE) ||
+      (direction === "horizontal" && col + ship.length > Gameboard.#BOARDSIZE)
     ) {
       throw new OutOfBoundsError();
     }
@@ -74,12 +76,12 @@ export default class Gameboard {
         const newCol = col + offset[1];
         if (
           newRow >= 0 &&
-          newRow < this.#boardSize &&
+          newRow < Gameboard.#BOARDSIZE &&
           newCol >= 0 &&
-          newCol < this.#boardSize &&
+          newCol < Gameboard.#BOARDSIZE &&
           this.#board[newRow][newCol].hasShip
         ) {
-          throw new OverlapError();
+          throw new AdjacentError();
         }
       }
       if (direction === "horizontal") {
@@ -98,16 +100,46 @@ export default class Gameboard {
     col: number,
     direction: "horizontal" | "vertical"
   ) {
-    if (!this.isValidPlacement(ship, row, col, direction)) return;
+    if (this.isValidPlacement(ship, row, col, direction)) {
+      if (direction === "horizontal") {
+        for (let i = 0; i < ship.length; i++) {
+          this.#board[row][col + i].hasShip = true;
+        }
+      } else {
+        for (let i = 0; i < ship.length; i++) {
+          this.#board[row + i][col].hasShip = true;
+        }
+      }
+      this.setCoords(ship, row, col, direction);
+      this.#ships.push(ship);
+    }
+  }
 
-    if (direction === "horizontal") {
-      for (let i = 0; i < ship.length; i++) {
-        this.#board[row][col + i].hasShip = true;
-      }
+  setCoords(
+    ship: Ship,
+    startRow: number,
+    startCol: number,
+    direction: "horizontal" | "vertical"
+  ) {
+    for (let i = 0; i < ship.length; i++) {
+      const row = direction === "vertical" ? startRow + i : startRow;
+      const col = direction === "horizontal" ? startCol + i : startCol;
+      ship.coords.push([row, col]);
+    }
+  }
+
+  receiveAttack(row: number, col: number) {
+    const cell = this.#board[row][col];
+    if (cell.state !== "no attempt") return;
+
+    if (cell.hasShip) {
+      cell.state = "hit";
+      const ship = this.#ships.find((ship) =>
+        ship.coords.some((coord) => coord[0] === row && coord[1] === col)
+      );
+      ship?.hit();
     } else {
-      for (let i = 0; i < ship.length; i++) {
-        this.#board[row + i][col].hasShip = true;
-      }
+      cell.state = "miss";
     }
   }
 }

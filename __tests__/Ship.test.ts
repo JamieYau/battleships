@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import Ship from "../src/Ship";
+import { ShipSizeError } from "../src/Error";
 
 describe("Ship Factory Function", () => {
   it("should return a ship object with initial properties", () => {
@@ -40,6 +41,14 @@ describe("Ship Factory Function", () => {
     expect(ship.hits).toBe(3);
   });
 
+  it("should return nothing when calling hit on a sunk ship", () => {
+    const ship = new Ship(3);
+    ship.hit();
+    ship.hit();
+    ship.hit();
+    expect(ship.hit()).toBeUndefined();
+  });
+
   it("should create a ship of length 1", () => {
     const ship = new Ship(1);
     expect(ship.length).toBe(1);
@@ -50,12 +59,30 @@ describe("Ship Factory Function", () => {
   it("should throw an error creating a ship of length 0", () => {
     expect(() => {
       new Ship(0);
-    }).toThrow("Ship has to have size of: 1-5");
+    }).toThrowError(ShipSizeError);
   });
 
   it("should throw an error creating a ship of length > 5", () => {
     expect(() => {
-      new Ship(0);
-    }).toThrow("Ship has to have size of: 1-5");
+      new Ship(6);
+    }).toThrowError(ShipSizeError);
+  });
+
+  it("should throw an error creating a ship of length < 0", () => {
+    expect(() => {
+      new Ship(-1);
+    }).toThrowError(ShipSizeError);
+  });
+
+  it("should set the ship coordinates", () => {
+    const ship = new Ship(2);
+    ship.coords = [
+      [0, 0],
+      [0, 1],
+    ];
+    expect(ship.coords).toEqual([
+      [0, 0],
+      [0, 1],
+    ]);
   });
 });

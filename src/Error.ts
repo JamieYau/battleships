@@ -1,3 +1,10 @@
+class ShipSizeError extends Error {
+  constructor(minSize: number, maxSize: number) {
+    super(`Ship size must be between ${minSize} and ${maxSize}.`);
+    this.name = "ShipSizeError";
+  }
+}
+
 class OutOfBoundsError extends Error {
   constructor() {
     super("Ship placement is out of bounds.");
@@ -19,4 +26,4 @@ class AdjacentError extends Error {
   }
 }
 
-export { OutOfBoundsError, OverlapError, AdjacentError };
+export { ShipSizeError, OutOfBoundsError, OverlapError, AdjacentError };
