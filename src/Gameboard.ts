@@ -57,26 +57,37 @@ export default class Gameboard {
       }
     }
 
-    // // Check for adjacent ships
-    // if (direction === "horizontal") {
-    //   for (let i = 0; i < ship.length; i++) {
-    //     if (
-    //       (this.#board[row][col + i - 1]?.hasShip ?? false) ||
-    //       (this.#board[row][col + i + 1]?.hasShip ?? false)
-    //     ) {
-    //       throw new OverlapError();
-    //     }
-    //   }
-    // } else {
-    //   for (let i = 0; i < ship.length; i++) {
-    //     if (
-    //       (this.#board[row + i - 1]?.[col]?.hasShip ?? false) ||
-    //       (this.#board[row + i + 1]?.[col]?.hasShip ?? false)
-    //     ) {
-    //       throw new OverlapError();
-    //     }
-    //   }
-    // }
+    // Check for adjacent ships
+    const adjacentOffsets = [
+      [-1, 0],
+      [1, 0],
+      [0, -1],
+      [0, 1], // Up, down, left, right
+      [-1, -1],
+      [-1, 1],
+      [1, -1],
+      [1, 1], // Diagonals
+    ];
+    for (let i = 0; i < ship.length; i++) {
+      for (const offset of adjacentOffsets) {
+        const newRow = row + offset[0];
+        const newCol = col + offset[1];
+        if (
+          newRow >= 0 &&
+          newRow < this.#boardSize &&
+          newCol >= 0 &&
+          newCol < this.#boardSize &&
+          this.#board[newRow][newCol].hasShip
+        ) {
+          throw new OverlapError();
+        }
+      }
+      if (direction === "horizontal") {
+        col++;
+      } else {
+        row++;
+      }
+    }
 
     return true; // If no errors were thrown, placement is valid
   }
