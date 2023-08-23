@@ -7,7 +7,7 @@ class ShipSizeError extends Error {
 
 class OutOfBoundsError extends Error {
   constructor() {
-    super("Ship placement is out of bounds.");
+    super("Cell is out of bounds.");
     this.name = "OutOfBoundsError";
   }
 }
@@ -26,4 +26,11 @@ class AdjacentError extends Error {
   }
 }
 
-export { ShipSizeError, OutOfBoundsError, OverlapError, AdjacentError };
+class RepeatAttemptError extends Error {
+  constructor(row: number, col: number) {
+    super(`This cell: [${row}, ${col}] has already been attacked.`);
+    this.name = "RepeatAttemptError";
+  }
+}
+
+export { ShipSizeError, OutOfBoundsError, OverlapError, AdjacentError, RepeatAttemptError };

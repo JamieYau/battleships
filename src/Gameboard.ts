@@ -1,5 +1,10 @@
 import Ship from "./Ship";
-import { AdjacentError, OutOfBoundsError, OverlapError } from "./Error";
+import {
+  AdjacentError,
+  OutOfBoundsError,
+  OverlapError,
+  RepeatAttemptError,
+} from "./Error";
 
 interface Cell {
   hasShip: boolean;
@@ -129,9 +134,20 @@ export default class Gameboard {
   }
 
   receiveAttack(row: number, col: number) {
+    if (
+      // Check for out-of-bounds attack
+      row < 0 ||
+      col < 0 ||
+      row >= Gameboard.#BOARDSIZE ||
+      col >= Gameboard.#BOARDSIZE
+    ) {
+      throw new OutOfBoundsError();
+    }
     const cell = this.#board[row][col];
-    if (cell.state !== "no attempt") return;
-
+    if (cell.state !== "no attempt") {
+      // Check for repeat attack
+      throw new RepeatAttemptError(row, col);
+    }
     if (cell.hasShip) {
       cell.state = "hit";
       const ship = this.#ships.find((ship) =>
@@ -144,6 +160,6 @@ export default class Gameboard {
   }
 
   allSunk(): boolean {
-    return false;
+    return this.#ships.every((ship) => ship.isSunk);
   }
 }

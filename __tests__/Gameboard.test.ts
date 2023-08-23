@@ -1,7 +1,12 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import Gameboard from "../src/Gameboard";
 import Ship from "../src/Ship";
-import { OutOfBoundsError, OverlapError, AdjacentError } from "../src/Error";
+import {
+  OutOfBoundsError,
+  OverlapError,
+  AdjacentError,
+  RepeatAttemptError,
+} from "../src/Error";
 
 describe("Gameboard Class", () => {
   let gameboard: Gameboard;
@@ -176,25 +181,31 @@ describe("Gameboard Class", () => {
     });
   });
   describe("receiveAttack", () => {
-    describe("hit", () => {
-      it("marks a cell as miss", () => {
-        gameboard.receiveAttack(0, 0);
-        expect(gameboard.board[0][0].state).toBe("miss");
-      });
+    it("marks a cell as miss", () => {
+      gameboard.receiveAttack(0, 0);
+      expect(gameboard.board[0][0].state).toBe("miss");
+    });
 
-      it("marks a cell as hit on a ship", () => {
-        const ship = new Ship(2);
-        gameboard.placeShip(ship, 0, 0, "horizontal");
-        gameboard.receiveAttack(0, 0);
-        expect(gameboard.board[0][0].state).toBe("hit");
-        expect(ship.hits).toBe(1);
-      });
+    it("marks a cell as hit on a ship", () => {
+      const ship = new Ship(2);
+      gameboard.placeShip(ship, 0, 0, "horizontal");
+      gameboard.receiveAttack(0, 0);
+      expect(gameboard.board[0][0].state).toBe("hit");
+      expect(ship.hits).toBe(1);
+    });
 
-      it("doesn't change the state of a cell that has already been attacked", () => {
-        gameboard.receiveAttack(0, 0);
-        gameboard.receiveAttack(0, 0);
-        expect(gameboard.board[0][0].state).toBe("miss");
-      });
+    it("doesn't change the state of a cell that has already been attacked", () => {
+      gameboard.receiveAttack(0, 0);
+      expect(gameboard.board[0][0].state).toBe("miss");
+      expect(() => gameboard.receiveAttack(0, 0)).toThrowError(
+        RepeatAttemptError
+      );
+    });
+
+    it("doesn't allow out of bounds attacks", () => {
+      expect(() => gameboard.receiveAttack(10, 0)).toThrowError(
+        OutOfBoundsError
+      );
     });
   });
   describe("allSunk", () => {
@@ -207,6 +218,23 @@ describe("Gameboard Class", () => {
       gameboard.receiveAttack(0, 1);
       gameboard.receiveAttack(1, 0);
       expect(gameboard.allSunk()).toBe(false);
+    });
+
+    it("returns true if all ships are sunk", () => {
+      const ship1 = new Ship(2);
+      const ship2 = new Ship(3);
+      gameboard.placeShip(ship1, 0, 0, "horizontal");
+      gameboard.placeShip(ship2, 2, 0, "vertical");
+      gameboard.receiveAttack(0, 0);
+      gameboard.receiveAttack(0, 1);
+      gameboard.receiveAttack(2, 0);
+      gameboard.receiveAttack(3, 0);
+      gameboard.receiveAttack(4, 0);
+      expect(gameboard.allSunk()).toBe(true);
+    });
+
+    it("returns true if there are no ships", () => {
+      expect(gameboard.allSunk()).toBe(true);
     });
   });
 });
