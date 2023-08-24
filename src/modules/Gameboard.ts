@@ -13,7 +13,7 @@ interface Cell {
 
 export default class Gameboard {
   #board: Cell[][];
-  static #BOARDSIZE = 10;
+  static #BOARDSIZE: number = 10;
   #ships: Ship[] = [];
 
   constructor() {
@@ -24,6 +24,10 @@ export default class Gameboard {
       }))
     );
     this.#ships = [];
+  }
+
+  public static get BOARDSIZE(): number {
+    return Gameboard.#BOARDSIZE;
   }
 
   get board() {
