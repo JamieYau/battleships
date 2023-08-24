@@ -21,6 +21,7 @@ describe("Player", () => {
       expect(player.gameboard).toBe(gameboard);
     });
   });
+  
   describe("takeTurn", () => {
     it("Should take turns and attack enemy gameboard", () => {
       const enemyGameboard = new Gameboard();
