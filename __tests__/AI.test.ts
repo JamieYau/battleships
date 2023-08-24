@@ -22,13 +22,21 @@ describe("AI", () => {
 
   describe("randomMove", () => {
     it("Should generate coords within range (0-9)", () => {
-      for (let i = 0; i < 100; i++) {
+      for (let i = 0; i < Math.pow(Gameboard.BOARDSIZE, 2); i++) {
         const move = ai.generateRandomMove();
         expect(move[0]).toBeGreaterThanOrEqual(0);
         expect(move[0]).toBeLessThan(10);
         expect(move[1]).toBeGreaterThanOrEqual(0);
         expect(move[1]).toBeLessThan(10);
       }
+    });
+    it("Should generate unique coordinates", () => {
+      const moves = new Set();
+      for (let i = 0; i < Math.pow(Gameboard.BOARDSIZE, 2); i++) {
+        const move = ai.generateRandomMove();
+        moves.add(move.toString());
+      }
+      expect(moves.size).toBe(100);
     });
   });
 
