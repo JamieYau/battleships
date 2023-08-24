@@ -16,4 +16,13 @@ export default class Player {
   get gameboard() {
     return this.#gameboard;
   }
+
+  takeTurn(enemyGameboard: Gameboard, row: number, col: number): boolean {
+    try {
+      enemyGameboard.receiveAttack(row, col);
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
 }
