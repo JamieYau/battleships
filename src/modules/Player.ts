@@ -18,6 +18,10 @@ export default class Player {
   }
 
   takeTurn(enemyGameboard: Gameboard, row: number, col: number): boolean {
+    if (enemyGameboard.allSunk()) {
+      return false;
+    }
+
     try {
       enemyGameboard.receiveAttack(row, col);
       return true;
