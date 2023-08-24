@@ -1,12 +1,12 @@
 import { beforeEach, describe, expect, it } from "vitest";
-import Gameboard from "../src/Gameboard";
-import Ship from "../src/Ship";
+import Gameboard from "../src/modules/Gameboard";
+import Ship from "../src/modules/Ship";
 import {
   OutOfBoundsError,
   OverlapError,
   AdjacentError,
   RepeatAttemptError,
-} from "../src/Error";
+} from "../src/modules/Error";
 
 describe("Gameboard Class", () => {
   let gameboard: Gameboard;
