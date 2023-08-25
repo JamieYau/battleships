@@ -9,7 +9,7 @@ export function showStartScreen(): void {
         <form id="start-form" autocomplete="off">
           <label for="player">Enter Name:</label>
           <input type="text" id="player-name" name="player" placeholder="name"/>
-          <button>Start Game</button>
+          <button type="submit">Start Game</button>
         </form>
       </div>
   `;

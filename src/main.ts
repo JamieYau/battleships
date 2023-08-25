@@ -9,8 +9,11 @@ form.addEventListener("submit", (event) => {
   const playerNameInput = document.getElementById(
     "player-name"
   ) as HTMLInputElement;
-  if (playerNameInput) {
-    const playerName = playerNameInput.value;
-    startGame(playerName);
+  let playerName = playerNameInput.value.trim(); // Remove leading/trailing whitespace
+
+  // If the player name is empty, set it to "Player"
+  if (!playerName) {
+    playerName = "Player";
   }
+  startGame(playerName);
 });
