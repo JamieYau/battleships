@@ -10,4 +10,12 @@ describe("Game", () => {
       expect(game).toBeInstanceOf(Game);
     });
   });
+
+  describe("currentPlayer", () => {
+    it("should return the current player", () => {
+      const gameboard = new Gameboard();
+      const game = new Game("", gameboard);
+      expect(game.currentPlayer).toBe(game.player);
+    });
+  });
 });

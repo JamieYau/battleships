@@ -17,6 +17,10 @@ export default class Game {
   get currentPlayer() {
     return this.#currentPlayer;
   }
+
+  get player() {
+    return this.#player;
+  }
 }
 
 export { Game };
