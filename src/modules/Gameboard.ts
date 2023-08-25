@@ -4,7 +4,7 @@ import {
   OutOfBoundsError,
   OverlapError,
   RepeatAttemptError,
-} from "./Error";
+} from "../errors/Error";
 
 interface Cell {
   hasShip: boolean;

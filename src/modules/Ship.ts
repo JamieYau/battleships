@@ -1,4 +1,4 @@
-import { ShipSizeError } from "./Error";
+import { ShipSizeError } from "../errors/Error";
 
 export default class Ship {
   static #MIN_LENGTH = 1;

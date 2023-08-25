@@ -6,7 +6,7 @@ import {
   OverlapError,
   AdjacentError,
   RepeatAttemptError,
-} from "../src/modules/Error";
+} from "../src/errors/Error";
 
 describe("Gameboard Class", () => {
   let gameboard: Gameboard;
