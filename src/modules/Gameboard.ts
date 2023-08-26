@@ -121,7 +121,9 @@ export default class Gameboard {
       }
       this.setCoords(ship, row, col, direction);
       this.#ships.push(ship);
+      return true;
     }
+    return false;
   }
 
   setCoords(
