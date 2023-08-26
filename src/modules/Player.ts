@@ -30,4 +30,8 @@ export default class Player {
       return false;
     }
   }
+
+  resetGameboard() {
+    this.gameboard.reset();
+  }
 }

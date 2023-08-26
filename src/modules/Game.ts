@@ -64,6 +64,13 @@ export default class Game {
       this.#winner = this.#player;
     }
   }
+
+  resetGame() {
+    this.#player.resetGameboard();
+    this.#ai.resetGameboard();
+    this.#winner = null;
+    this.#currentPlayer = this.#player;
+  }
 }
 
 export { Game };

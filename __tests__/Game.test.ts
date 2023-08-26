@@ -107,4 +107,27 @@ describe("Game", () => {
       expect(game.winner).toBe(game.ai);
     });
   });
+
+  describe("resetGame", () => {
+    it("should reset the game", () => {
+      const playerName = "John";
+      const gameboard = new Gameboard();
+      gameboard.placeShip(new Ship(2), 0, 0, "horizontal");
+      const game = new Game(playerName, gameboard);
+
+      // Sink all of the human player's ships
+      game.player.gameboard.ships.forEach((ship) => {
+        ship.coords.forEach((coord) => {
+          const [row, col] = coord;
+          game.player.gameboard.receiveAttack(row, col);
+        });
+      });
+
+      game.resetGame();
+      expect(game.player.gameboard.ships.length).toBe(0);
+      expect(game.ai.gameboard.ships.length).toBe(0);
+      expect(game.winner).toBe(null);
+      expect(game.currentPlayer).toBe(game.player);
+    });
+  });
 });

@@ -172,4 +172,14 @@ export default class Gameboard {
   allSunk(): boolean {
     return this.#ships.every((ship) => ship.isSunk);
   }
+
+  reset() {
+    this.#board = Array.from({ length: 10 }, () =>
+      Array.from({ length: 10 }, () => ({
+        hasShip: false,
+        state: "no attempt",
+      }))
+    );
+    this.#ships = [];
+  }
 }
