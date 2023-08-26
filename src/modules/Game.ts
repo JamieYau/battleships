@@ -56,6 +56,14 @@ export default class Game {
     this.switchTurn();
     return turnResult;
   }
+
+  checkForWinner() {
+    if (this.#player.gameboard.allSunk()) {
+      this.#winner = this.#ai;
+    } else if (this.#ai.gameboard.allSunk()) {
+      this.#winner = this.#player;
+    }
+  }
 }
 
 export { Game };

@@ -34,6 +34,10 @@ export default class Gameboard {
     return this.#board;
   }
 
+  get ships() {
+    return this.#ships;
+  }
+
   isValidPlacement(
     ship: Ship,
     row: number,

@@ -3,6 +3,7 @@ import Gameboard from "../src/modules/Gameboard";
 import Player from "../src/modules/Player";
 import { describe, it, expect } from "vitest";
 import AI from "../src/modules/AI";
+import Ship from "../src/modules/Ship";
 
 describe("Game", () => {
   describe("constructor", () => {
@@ -20,6 +21,22 @@ describe("Game", () => {
       expect(game.player).toBeInstanceOf(Player);
       expect(game.player.name).toBe(playerName);
       expect(game.currentPlayer).toBe(game.player);
+    });
+
+    it("should initialize an AI player", () => {
+      const playerName = "John";
+      const gameboard = new Gameboard();
+      const game = new Game(playerName, gameboard);
+
+      expect(game.ai).toBeInstanceOf(AI);
+    });
+
+    it("should initialize the winner as null", () => {
+      const playerName = "John";
+      const gameboard = new Gameboard();
+      const game = new Game(playerName, gameboard);
+
+      expect(game.winner).toBe(null);
     });
   });
 
@@ -65,6 +82,29 @@ describe("Game", () => {
       const turnResult = game.takeTurn(row, col);
 
       expect(turnResult).toBe(true);
+    });
+  });
+
+  describe("checkForWinner", () => {
+    it("should set the winner to the AI player if the human player's gameboard is all sunk", () => {
+      const playerName = "John";
+      const gameboard = new Gameboard();
+      gameboard.placeShip(new Ship(2), 0, 0, "horizontal");
+      const game = new Game(playerName, gameboard);
+
+      game.checkForWinner();
+      expect(game.winner).toBe(null);
+
+      // Sink all of the human player's ships
+      game.player.gameboard.ships.forEach((ship) => {
+        ship.coords.forEach((coord) => {
+          const [row, col] = coord;
+          game.player.gameboard.receiveAttack(row, col);
+        });
+      });
+
+      game.checkForWinner();
+      expect(game.winner).toBe(game.ai);
     });
   });
 });
