@@ -19,4 +19,17 @@ form.addEventListener("submit", (event) => {
 
   // Show the ship placement screen UI
   showShipPlacementScreen(playerName);
+
+  // Add event listener to the placement grid cells
+  const gridCells = document.querySelectorAll(".grid-cell");
+  gridCells.forEach((cell) => {
+    cell.addEventListener("click", handleCellClick);
+  });
+
+  function handleCellClick(event: Event) {
+    const cell = event.target as HTMLElement;
+    const row = cell.dataset.row;
+    const col = cell.dataset.col;
+    console.log(`Clicked on row ${row}, col ${col}`);
+  }
 });
