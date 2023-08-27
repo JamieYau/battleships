@@ -3,6 +3,9 @@ export function showStartScreen(): void {
   const container = document.getElementById("app");
   if (!container) return;
 
+  const app = document.getElementById("app");
+  if (!app) return;
+
   const template = `
       <div id="start-container">
         <h1>Battleship</h1>

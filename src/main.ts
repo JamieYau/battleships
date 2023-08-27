@@ -1,5 +1,6 @@
 import "./assets/style.css";
 import { showStartScreen } from "./components/StartScreen";
+import { showShipPlacementScreen } from "./components/ShipPlacementScreen";
 
 showStartScreen();
 
@@ -15,5 +16,7 @@ form.addEventListener("submit", (event) => {
   if (!playerName) {
     playerName = "Player";
   }
-  startGame(playerName);
+
+  // Show the ship placement screen UI
+  showShipPlacementScreen(playerName);
 });
