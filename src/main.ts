@@ -37,4 +37,22 @@ form.addEventListener("submit", (event) => {
   gridCells.forEach((cell) => {
     cell.addEventListener("click", handleCellClick);
   });
+
+  // Attach event listeners for ship segments
+  const shipSegments = document.querySelectorAll(".ship-segment") as NodeListOf <HTMLDivElement>;
+  shipSegments.forEach((segment) => {
+    segment.addEventListener("dragstart", (event) => {
+      if (!(event.target instanceof HTMLElement)) return;
+      event.target.classList.add("dragging");
+      const shipLength = event.target.parentElement?.dataset.shipLength;
+      if (!shipLength) return;
+      console.log(shipLength);
+      event.dataTransfer?.setData("text/plain", shipLength);
+    });
+
+    segment.addEventListener("dragend", (event) => {
+      if (!(event.target instanceof HTMLElement)) return;
+      event.target.classList.remove("dragging");
+    });
+  });
 });

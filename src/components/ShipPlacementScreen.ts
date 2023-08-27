@@ -46,6 +46,7 @@ function generateShip(ship: Ship): HTMLDivElement {
   for (let i = 0; i < ship.length; i++) {
     const shipSegment = document.createElement("div");
     shipSegment.classList.add("ship-segment");
+    shipSegment.draggable = true;
     shipItem.appendChild(shipSegment);
   }
   return shipItem;
