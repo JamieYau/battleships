@@ -41,6 +41,10 @@ export default class Game {
     return this.#winner;
   }
 
+  static get shipList(): Ship[] {
+    return Game.#DEFAULT_SHIPS;
+  }
+
   switchTurn() {
     this.#currentPlayer =
       this.#currentPlayer === this.#player ? this.#ai : this.#player;

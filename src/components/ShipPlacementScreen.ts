@@ -1,3 +1,4 @@
+import { Game } from "../modules/Game";
 export function showShipPlacementScreen(playerName: string): void {
   const container = document.getElementById("app");
   if (!container) return;
@@ -8,6 +9,7 @@ export function showShipPlacementScreen(playerName: string): void {
         <div id="placement-grid" class="grid-container">
             ${generateGridCells()}
         </div>
+        <div id="ship-list">${generateShipList()}</div>
     </div>
   `;
   container.innerHTML = template;
@@ -21,4 +23,18 @@ function generateGridCells(): string {
     }
   }
   return gridCells;
+}
+
+function generateShipList(): string {
+  const shipList = Game.shipList;
+  let shipListHTML = "";
+  shipList.forEach((ship) => {
+    shipListHTML += `
+            <div class="ship-list-item">
+                <span>${ship}</span>
+                <span>${ship.length}</span>
+            </div>
+        `;
+  });
+  return shipListHTML;
 }
