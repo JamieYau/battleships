@@ -142,8 +142,8 @@ button:focus-visible {
 
 /* Style for individual ship segments */
 .ship-segment {
-  height: var(--cell-size);
-  width: var(--cell-size);
+  height: calc(var(--cell-size) - var(--cell-gap));
+  width: calc(var(--cell-size) - var(--cell-gap));
   background-color: #fff;
 
   /* Add a border radius to the first and last segment */
