@@ -3,6 +3,11 @@ import { showStartScreen } from "./components/StartScreen";
 import { showShipPlacementScreen } from "./components/ShipPlacementScreen";
 import Gameboard from "./modules/Gameboard";
 import Game from "./modules/Game";
+import {
+  handleDragStart,
+  handleDragEnd,
+  handleDrop,
+} from "./handlers/shipPlacementHandlers";
 
 showStartScreen();
 
@@ -23,51 +28,23 @@ form.addEventListener("submit", (event) => {
   // Show the ship placement screen UI
   showShipPlacementScreen(playerName);
 
-  const gridCells = document.querySelectorAll(".grid-cell");
-  gridCells.forEach((cell) => {
-    cell.addEventListener("dragover", (event) => {
-      event.preventDefault();
-    });
-
-    cell.addEventListener("drop", (event: Event) => {
-      event.preventDefault();
-      const targetCell = event.target as HTMLElement; // Cast to HTMLElement
-      const shipLength = (event as DragEvent).dataTransfer?.getData(
-        "text/plain"
-      );
-      if (!shipLength) return;
-
-      // Handle ship placement here
-      const row = parseInt(targetCell.dataset.row || "");
-      const col = parseInt(targetCell.dataset.col || "");
-      // Update ship positions on the grid
-      console.log(`row: ${row}, col: ${col}`);
-      console.log(`shipLength: ${shipLength}`);
-    });
-  });
-
   // Attach event listeners for ship segments
   const shipSegments = document.querySelectorAll(
     ".ship-segment"
   ) as NodeListOf<HTMLDivElement>;
   shipSegments.forEach((segment) => {
-    segment.addEventListener("dragstart", (event) => {
-      if (!(event.target instanceof HTMLElement)) return;
-      event.target.classList.add("dragging");
-      const ship = event.target.parentElement;
-      ship?.classList.add("dragging");
-      const shipLength = ship?.dataset.shipLength;
-      if (!shipLength) return;
-      console.log(shipLength);
-      const dragEvent = event as DragEvent; // Cast to DragEvent
-      dragEvent.dataTransfer?.setData("text/plain", shipLength);
-    });
+    segment.addEventListener("dragstart", handleDragStart);
+    segment.addEventListener("dragend", handleDragEnd);
+  });
 
-    segment.addEventListener("dragend", (event) => {
-      if (!(event.target instanceof HTMLElement)) return;
-      event.target.classList.remove("dragging");
-      const ship = event.target.parentElement;
-      ship?.classList.remove("dragging");
+  // Attach event listeners for grid cells
+  const gridCells = document.querySelectorAll(
+    ".grid-cell"
+  ) as NodeListOf<HTMLDivElement>;
+  gridCells.forEach((cell) => {
+    cell.addEventListener("dragover", (event) => {
+      event.preventDefault();
     });
+    cell.addEventListener("drop", handleDrop);
   });
 });
