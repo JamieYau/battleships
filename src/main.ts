@@ -5,6 +5,7 @@ import Gameboard from "./modules/Gameboard";
 import Game from "./modules/Game";
 import {
   handleShipDragStart,
+  handleDragOver,
   handleShipDragEnd,
   handleDrop,
 } from "./handlers/shipPlacementHandlers";
@@ -28,6 +29,8 @@ form.addEventListener("submit", (event) => {
   // Show the ship placement screen UI
   showShipPlacementScreen(playerName);
 
+  let shipInfo: { shipDirection: string; shipLength: string; segmentIndex: number; } | null = null; // Declare shipInfo outside of the event listeners
+
   // Attach event listeners for ship items
   const shipItems = document.querySelectorAll(
     ".ship-item"
@@ -39,7 +42,7 @@ form.addEventListener("submit", (event) => {
     segments.forEach((segment) => {
       segment.addEventListener("mousedown", () => {
         shipItem.addEventListener("dragstart", (event) => {
-          handleShipDragStart(event, shipItem, segment);
+          shipInfo = handleShipDragStart(event, shipItem, segment);
         });
 
         shipItem.addEventListener("dragend", () => {
@@ -55,12 +58,15 @@ form.addEventListener("submit", (event) => {
   ) as NodeListOf<HTMLDivElement>;
   gridCells.forEach((cell) => {
     cell.addEventListener("dragover", (event) => {
-      event.preventDefault();
-      cell.classList.add("drag-over");
+      if (!shipInfo) return;
+      handleDragOver(event, shipInfo);
     });
     cell.addEventListener("dragleave", () => {
       cell.classList.remove("drag-over");
     });
-    cell.addEventListener("drop", (event) => handleDrop(event, game));
+    cell.addEventListener("drop", (event) => {
+      handleDrop(event, game);
+      shipInfo = null;
+    });
   });
 });
