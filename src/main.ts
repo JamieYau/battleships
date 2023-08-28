@@ -65,7 +65,8 @@ form.addEventListener("submit", (event) => {
       cell.classList.remove("drag-over");
     });
     cell.addEventListener("drop", (event) => {
-      handleDrop(event, game);
+      if (!shipInfo) return;
+      handleDrop(event, shipInfo, game);
       shipInfo = null;
     });
   });
