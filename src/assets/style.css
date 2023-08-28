@@ -120,6 +120,10 @@ button:focus-visible {
   height: var(--cell-size);
   background-color: #ccc;
   cursor: pointer;
+
+  &.drag-over {
+    background-color: #646cff;
+  }
 }
 
 /* Style for the ship list */

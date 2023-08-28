@@ -56,6 +56,10 @@ form.addEventListener("submit", (event) => {
   gridCells.forEach((cell) => {
     cell.addEventListener("dragover", (event) => {
       event.preventDefault();
+      cell.classList.add("drag-over");
+    });
+    cell.addEventListener("dragleave", () => {
+      cell.classList.remove("drag-over");
     });
     cell.addEventListener("drop", (event) => handleDrop(event, game));
   });
