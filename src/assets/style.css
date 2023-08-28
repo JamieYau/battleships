@@ -124,6 +124,10 @@ button:focus-visible {
   &.drag-over {
     background-color: #646cff;
   }
+
+  &.ship {
+    background-color: #2259b7;
+  }
 }
 
 /* Style for the ship list */

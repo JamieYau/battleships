@@ -4,7 +4,11 @@ export function handleSegmentMouseDown(event: MouseEvent) {
   return event.target as HTMLElement;
 }
 
-export function handleShipDragStart(event: DragEvent, shipItem: HTMLElement, segment: HTMLElement) {
+export function handleShipDragStart(
+  event: DragEvent,
+  shipItem: HTMLElement,
+  segment: HTMLElement
+) {
   segment.classList.add("dragging");
   shipItem.classList.add("dragging");
 
@@ -54,6 +58,30 @@ export function handleDrop(event: DragEvent, game: Game) {
   } else {
     row -= segmentIndex;
   }
+
+  const cellsToHighlight: HTMLElement[] = [];
+
+  for (let i = 0; i < shipLength; i++) {
+    let cell: HTMLElement | null = null;
+    if (shipDirection === "horizontal") {
+      cell = document.querySelector(
+        `[data-row="${row}"][data-col="${col + i}"]`
+      );
+    } else {
+      cell = document.querySelector(
+        `[data-row="${row + i}"][data-col="${col}"]`
+      );
+    }
+    if (cell) {
+      cellsToHighlight.push(cell);
+    }
+  }
+
+  cellsToHighlight.forEach((cell) => {
+    if (cell) {
+      cell.classList.add("ship");
+    }
+  });
 
   if (
     game.player.gameboard.isValidPlacement(shipLength, row, col, shipDirection)
