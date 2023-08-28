@@ -31,10 +31,11 @@ function generateShipList(): void {
   const shipList = Game.shipList;
   const shipListContainer = document.getElementById("ship-list");
   if (!shipListContainer) return;
-  shipList.forEach((ship) => {
-    const shipItem = generateShip(ship);
+  for (let i = 0; i < shipList.length; i++) {
+    const shipItem = generateShip(shipList[i]);
+    shipItem.dataset.id = i.toString();
     shipListContainer.appendChild(shipItem);
-  });
+  }
 }
 
 function generateShip(ship: Ship): HTMLDivElement {
@@ -42,10 +43,12 @@ function generateShip(ship: Ship): HTMLDivElement {
 
   const shipItem = document.createElement("div");
   shipItem.classList.add("ship-item");
+  shipItem.classList.add("horizontal");
   shipItem.dataset.shipLength = ship.length.toString();
   for (let i = 0; i < ship.length; i++) {
     const shipSegment = document.createElement("div");
     shipSegment.classList.add("ship-segment");
+    shipSegment.dataset.index = i.toString();
     shipSegment.draggable = true;
     shipItem.appendChild(shipSegment);
   }
