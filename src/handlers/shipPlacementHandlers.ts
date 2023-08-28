@@ -97,6 +97,13 @@ export function handleDragOver(
   });
 }
 
+export function handleDragLeave() {
+  const gridCells = document.querySelectorAll(".grid-cell");
+  gridCells.forEach((cell) => {
+    cell.classList.remove("drag-over");
+  });
+}
+
 export function handleShipDragEnd(segment: HTMLElement, shipItem: HTMLElement) {
   segment.classList.remove("dragging");
   shipItem.classList.remove("dragging");

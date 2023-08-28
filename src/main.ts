@@ -8,6 +8,7 @@ import {
   handleDragOver,
   handleShipDragEnd,
   handleDrop,
+  handleDragLeave,
 } from "./handlers/shipPlacementHandlers";
 
 showStartScreen();
@@ -62,7 +63,7 @@ form.addEventListener("submit", (event) => {
       handleDragOver(event, shipInfo);
     });
     cell.addEventListener("dragleave", () => {
-      cell.classList.remove("drag-over");
+      handleDragLeave();
     });
     cell.addEventListener("drop", (event) => {
       if (!shipInfo) return;
