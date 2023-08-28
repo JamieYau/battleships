@@ -115,8 +115,13 @@ export function handleDrop(
   game: Game
 ) {
   event.preventDefault();
+  // Remove the 'drag-over' class from all cells
+  const gridCells = document.querySelectorAll(".grid-cell");
+  gridCells.forEach((cell) => {
+    cell.classList.remove("drag-over");
+  });
+
   const targetCell = event.target as HTMLElement;
-  targetCell.classList.remove("drag-over");
 
   const { shipDirection, shipLength, row, col } = calculatePlacement(
     shipInfo,
