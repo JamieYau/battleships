@@ -31,6 +31,7 @@ export function handleShipDragEnd(segment: HTMLElement, shipItem: HTMLElement) {
 export function handleDrop(event: DragEvent, game: Game) {
   event.preventDefault();
   const targetCell = event.target as HTMLElement;
+  targetCell.classList.remove("drag-over");
   const dataString = event.dataTransfer?.getData("application/json");
 
   if (!dataString) return;
@@ -59,36 +60,35 @@ export function handleDrop(event: DragEvent, game: Game) {
     row -= segmentIndex;
   }
 
-  const cellsToHighlight: HTMLElement[] = [];
-
-  for (let i = 0; i < shipLength; i++) {
-    let cell: HTMLElement | null = null;
-    if (shipDirection === "horizontal") {
-      cell = document.querySelector(
-        `[data-row="${row}"][data-col="${col + i}"]`
-      );
-    } else {
-      cell = document.querySelector(
-        `[data-row="${row + i}"][data-col="${col}"]`
-      );
-    }
-    if (cell) {
-      cellsToHighlight.push(cell);
-    }
-  }
-
-  cellsToHighlight.forEach((cell) => {
-    if (cell) {
-      cell.classList.add("ship");
-    }
-  });
-
   if (
     game.player.gameboard.isValidPlacement(shipLength, row, col, shipDirection)
   ) {
     // Handle ship placement here
     console.log(`row: ${row}, col: ${col}`);
     console.log(`shipLength: ${shipLength}`);
+    const cellsToHighlight: HTMLElement[] = [];
+
+    for (let i = 0; i < shipLength; i++) {
+      let cell: HTMLElement | null = null;
+      if (shipDirection === "horizontal") {
+        cell = document.querySelector(
+          `[data-row="${row}"][data-col="${col + i}"]`
+        );
+      } else {
+        cell = document.querySelector(
+          `[data-row="${row + i}"][data-col="${col}"]`
+        );
+      }
+      if (cell) {
+        cellsToHighlight.push(cell);
+      }
+    }
+
+    cellsToHighlight.forEach((cell) => {
+      if (cell) {
+        cell.classList.add("ship");
+      }
+    });
   } else {
     console.log("Invalid placement");
   }
