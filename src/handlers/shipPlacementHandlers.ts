@@ -36,28 +36,28 @@ export function handleDrop(event: DragEvent, game: Game) {
     `[data-id="${shipId}"]`
   ) as HTMLElement;
   console.log(shipItem);
-  // Get the selected ship from the game
-  const selectedShip = Game.shipList.find(
-    (ship) => ship.length === parseInt(shipItem?.dataset.shipLength || "")
-  );
-  if (!selectedShip) return;
+
+  const shipDirection = shipItem.classList.contains("horizontal")
+    ? "horizontal"
+    : "vertical";
+  const shipLength = parseInt(shipItem.dataset.shipLength || "");
 
   let row = parseInt(targetCell.dataset.row || "");
   let col = parseInt(targetCell.dataset.col || "");
 
-  if (shipItem.classList.contains("horizontal")) {
+  if (shipDirection === "horizontal") {
     col -= segmentIndex;
   } else {
     row -= segmentIndex;
   }
   // Check if the ship placement is valid using isValidPlacement
   if (
-    game.player.gameboard.isValidPlacement(selectedShip, row, col, "horizontal")
+    game.player.gameboard.isValidPlacement(shipLength, row, col, shipDirection)
   ) {
     // Handle ship placement here
     // Update ship positions on the grid
     console.log(`row: ${row}, col: ${col}`);
-    console.log(`shipLength: ${selectedShip.length}`);
+    console.log(`shipLength: ${shipLength}`);
   } else {
     console.log("Invalid placement"); // Handle invalid placement
   }

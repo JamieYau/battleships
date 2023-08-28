@@ -39,7 +39,7 @@ export default class Gameboard {
   }
 
   isValidPlacement(
-    ship: Ship,
+    shipLength: number,
     row: number,
     col: number,
     direction: "horizontal" | "vertical"
@@ -50,8 +50,8 @@ export default class Gameboard {
       col < 0 ||
       row >= Gameboard.#BOARDSIZE ||
       col >= Gameboard.#BOARDSIZE ||
-      (direction === "vertical" && row + ship.length > Gameboard.#BOARDSIZE) ||
-      (direction === "horizontal" && col + ship.length > Gameboard.#BOARDSIZE)
+      (direction === "vertical" && row + shipLength > Gameboard.#BOARDSIZE) ||
+      (direction === "horizontal" && col + shipLength > Gameboard.#BOARDSIZE)
     ) {
       throw new OutOfBoundsError();
     }
@@ -60,12 +60,12 @@ export default class Gameboard {
     if (
       direction === "horizontal" &&
       this.#board[row]
-        .slice(col, col + ship.length)
+        .slice(col, col + shipLength)
         .some((cell) => cell.hasShip)
     ) {
       throw new OverlapError();
     } else if (direction === "vertical") {
-      for (let i = 0; i < ship.length; i++) {
+      for (let i = 0; i < shipLength; i++) {
         if (this.#board[row + i][col].hasShip) {
           throw new OverlapError();
         }
@@ -83,7 +83,7 @@ export default class Gameboard {
       [1, -1],
       [1, 1], // Diagonals
     ];
-    for (let i = 0; i < ship.length; i++) {
+    for (let i = 0; i < shipLength; i++) {
       for (const offset of adjacentOffsets) {
         const newRow = row + offset[0];
         const newCol = col + offset[1];
@@ -113,7 +113,7 @@ export default class Gameboard {
     col: number,
     direction: "horizontal" | "vertical"
   ) {
-    if (this.isValidPlacement(ship, row, col, direction)) {
+    if (this.isValidPlacement(ship.length, row, col, direction)) {
       if (direction === "horizontal") {
         for (let i = 0; i < ship.length; i++) {
           this.#board[row][col + i].hasShip = true;
