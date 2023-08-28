@@ -1,31 +1,15 @@
 import Game from "../modules/Game";
 
-
-let currentDraggingShip: HTMLElement | null = null;
-let currentDraggingSegment: HTMLElement | null = null;
-
-export function handleSegmentMouseDown(
-  event: MouseEvent,
-  shipItem: HTMLElement,
-  segment: HTMLElement
-) {
-
-  // Store the segment and ship-item for later use
-  currentDraggingShip = shipItem;
-  currentDraggingSegment = segment;
+export function handleSegmentMouseDown(event: MouseEvent) {
+  return event.target as HTMLElement;
 }
 
-export function handleShipDragStart(
-  event: DragEvent,
-  shipItem: HTMLElement
-) {
-  if (!currentDraggingSegment) return;
-
-  currentDraggingSegment.classList.add("dragging");
+export function handleShipDragStart(event: DragEvent, shipItem: HTMLElement, segment: HTMLElement) {
+  segment.classList.add("dragging");
   shipItem.classList.add("dragging");
 
   const shipItemId = shipItem.dataset.id;
-  const segmentIndex = parseInt(currentDraggingSegment.dataset.index || "");
+  const segmentIndex = parseInt(segment.dataset.index || "");
 
   const data = {
     shipId: shipItemId,
@@ -35,14 +19,9 @@ export function handleShipDragStart(
   event.dataTransfer?.setData("application/json", JSON.stringify(data));
 }
 
-export function handleShipDragEnd(event: DragEvent) {
-  if (!currentDraggingShip || !currentDraggingSegment) return;
-
-  currentDraggingSegment.classList.remove("dragging");
-  currentDraggingShip.classList.remove("dragging");
-
-  currentDraggingShip = null;
-  currentDraggingSegment = null;
+export function handleShipDragEnd(segment: HTMLElement, shipItem: HTMLElement) {
+  segment.classList.remove("dragging");
+  shipItem.classList.remove("dragging");
 }
 
 export function handleDrop(event: DragEvent, game: Game) {
@@ -50,7 +29,7 @@ export function handleDrop(event: DragEvent, game: Game) {
   const targetCell = event.target as HTMLElement;
   const dataString = event.dataTransfer?.getData("application/json");
 
-  if (!dataString || !currentDraggingShip) return;
+  if (!dataString) return;
 
   const data = JSON.parse(dataString);
   const shipId = data.shipId;
@@ -85,6 +64,4 @@ export function handleDrop(event: DragEvent, game: Game) {
   } else {
     console.log("Invalid placement");
   }
-
-  currentDraggingShip = null;
 }

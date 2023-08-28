@@ -4,7 +4,6 @@ import { showShipPlacementScreen } from "./components/ShipPlacementScreen";
 import Gameboard from "./modules/Gameboard";
 import Game from "./modules/Game";
 import {
-  handleSegmentMouseDown,
   handleShipDragStart,
   handleShipDragEnd,
   handleDrop,
@@ -38,16 +37,16 @@ form.addEventListener("submit", (event) => {
       ".ship-segment"
     ) as NodeListOf<HTMLDivElement>;
     segments.forEach((segment) => {
-      segment.addEventListener("mousedown", (event) => {
-        handleSegmentMouseDown(event, shipItem, segment);
+      segment.addEventListener("mousedown", () => {
+        shipItem.addEventListener("dragstart", (event) => {
+          handleShipDragStart(event, shipItem, segment);
+        });
+
+        shipItem.addEventListener("dragend", () => {
+          handleShipDragEnd(segment, shipItem);
+        });
       });
     });
-
-    shipItem.addEventListener("dragstart", (event) => {
-      handleShipDragStart(event, shipItem);
-    });
-
-    shipItem.addEventListener("dragend", handleShipDragEnd);
   });
 
   // Attach event listeners for grid cells
