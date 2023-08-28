@@ -45,6 +45,6 @@ form.addEventListener("submit", (event) => {
     cell.addEventListener("dragover", (event) => {
       event.preventDefault();
     });
-    cell.addEventListener("drop", handleDrop);
+    cell.addEventListener("drop", (event) => handleDrop(event, game));
   });
 });
