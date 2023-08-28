@@ -34,6 +34,7 @@ function generateShipList(): void {
   for (let i = 0; i < shipList.length; i++) {
     const shipItem = generateShip(shipList[i]);
     shipItem.dataset.id = i.toString();
+    shipItem.draggable = true;
     shipListContainer.appendChild(shipItem);
   }
 }
@@ -49,7 +50,7 @@ function generateShip(ship: Ship): HTMLDivElement {
     const shipSegment = document.createElement("div");
     shipSegment.classList.add("ship-segment");
     shipSegment.dataset.index = i.toString();
-    shipSegment.draggable = true;
+    shipSegment.draggable = false;
     shipItem.appendChild(shipSegment);
   }
   return shipItem;

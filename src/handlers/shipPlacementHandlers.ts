@@ -1,12 +1,31 @@
 import Game from "../modules/Game";
 
-export function handleDragStart(event: DragEvent) {
-  const segment = event.target as HTMLElement;
-  segment.classList.add("dragging");
-  const shipItem = segment.parentElement;
-  shipItem?.classList.add("dragging");
-  const shipItemId = shipItem?.dataset.id;
-  const segmentIndex = parseInt(segment.dataset.index || "");
+
+let currentDraggingShip: HTMLElement | null = null;
+let currentDraggingSegment: HTMLElement | null = null;
+
+export function handleSegmentMouseDown(
+  event: MouseEvent,
+  shipItem: HTMLElement,
+  segment: HTMLElement
+) {
+
+  // Store the segment and ship-item for later use
+  currentDraggingShip = shipItem;
+  currentDraggingSegment = segment;
+}
+
+export function handleShipDragStart(
+  event: DragEvent,
+  shipItem: HTMLElement
+) {
+  if (!currentDraggingSegment) return;
+
+  currentDraggingSegment.classList.add("dragging");
+  shipItem.classList.add("dragging");
+
+  const shipItemId = shipItem.dataset.id;
+  const segmentIndex = parseInt(currentDraggingSegment.dataset.index || "");
 
   const data = {
     shipId: shipItemId,
@@ -16,18 +35,23 @@ export function handleDragStart(event: DragEvent) {
   event.dataTransfer?.setData("application/json", JSON.stringify(data));
 }
 
-export function handleDragEnd(event: DragEvent) {
-  const target = event.target as HTMLElement;
-  target.classList.remove("dragging");
-  const ship = target.parentElement;
-  ship?.classList.remove("dragging");
+export function handleShipDragEnd(event: DragEvent) {
+  if (!currentDraggingShip || !currentDraggingSegment) return;
+
+  currentDraggingSegment.classList.remove("dragging");
+  currentDraggingShip.classList.remove("dragging");
+
+  currentDraggingShip = null;
+  currentDraggingSegment = null;
 }
 
 export function handleDrop(event: DragEvent, game: Game) {
   event.preventDefault();
   const targetCell = event.target as HTMLElement;
   const dataString = event.dataTransfer?.getData("application/json");
-  if (!dataString) return;
+
+  if (!dataString || !currentDraggingShip) return;
+
   const data = JSON.parse(dataString);
   const shipId = data.shipId;
   const segmentIndex = data.segmentIndex;
@@ -35,7 +59,8 @@ export function handleDrop(event: DragEvent, game: Game) {
   const shipItem = document.querySelector(
     `[data-id="${shipId}"]`
   ) as HTMLElement;
-  console.log(shipItem);
+
+  if (!shipItem) return;
 
   const shipDirection = shipItem.classList.contains("horizontal")
     ? "horizontal"
@@ -50,15 +75,16 @@ export function handleDrop(event: DragEvent, game: Game) {
   } else {
     row -= segmentIndex;
   }
-  // Check if the ship placement is valid using isValidPlacement
+
   if (
     game.player.gameboard.isValidPlacement(shipLength, row, col, shipDirection)
   ) {
     // Handle ship placement here
-    // Update ship positions on the grid
     console.log(`row: ${row}, col: ${col}`);
     console.log(`shipLength: ${shipLength}`);
   } else {
-    console.log("Invalid placement"); // Handle invalid placement
+    console.log("Invalid placement");
   }
+
+  currentDraggingShip = null;
 }

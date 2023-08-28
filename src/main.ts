@@ -4,8 +4,9 @@ import { showShipPlacementScreen } from "./components/ShipPlacementScreen";
 import Gameboard from "./modules/Gameboard";
 import Game from "./modules/Game";
 import {
-  handleDragStart,
-  handleDragEnd,
+  handleSegmentMouseDown,
+  handleShipDragStart,
+  handleShipDragEnd,
   handleDrop,
 } from "./handlers/shipPlacementHandlers";
 
@@ -28,13 +29,25 @@ form.addEventListener("submit", (event) => {
   // Show the ship placement screen UI
   showShipPlacementScreen(playerName);
 
-  // Attach event listeners for ship segments
-  const shipSegments = document.querySelectorAll(
-    ".ship-segment"
+  // Attach event listeners for ship items
+  const shipItems = document.querySelectorAll(
+    ".ship-item"
   ) as NodeListOf<HTMLDivElement>;
-  shipSegments.forEach((segment) => {
-    segment.addEventListener("dragstart", handleDragStart);
-    segment.addEventListener("dragend", handleDragEnd);
+  shipItems.forEach((shipItem) => {
+    const segments = shipItem.querySelectorAll(
+      ".ship-segment"
+    ) as NodeListOf<HTMLDivElement>;
+    segments.forEach((segment) => {
+      segment.addEventListener("mousedown", (event) => {
+        handleSegmentMouseDown(event, shipItem, segment);
+      });
+    });
+
+    shipItem.addEventListener("dragstart", (event) => {
+      handleShipDragStart(event, shipItem);
+    });
+
+    shipItem.addEventListener("dragend", handleShipDragEnd);
   });
 
   // Attach event listeners for grid cells
