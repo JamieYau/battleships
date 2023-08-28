@@ -5,7 +5,6 @@ export function handleSegmentMouseDown(event: MouseEvent) {
 }
 
 export function handleShipDragStart(
-  event: DragEvent,
   shipItem: HTMLElement,
   segment: HTMLElement
 ) {
@@ -18,7 +17,7 @@ export function handleShipDragStart(
     : "vertical";
   const shipLength = shipItem.dataset.shipLength || "";
 
-  return {shipDirection, shipLength, segmentIndex };
+  return { shipDirection, shipLength, segmentIndex };
 }
 
 // Helper function to get cells to highlight
@@ -49,24 +48,35 @@ function getCellsToHighlight(
   return cellsToHighlight;
 }
 
-export function handleDragOver(
-  event: DragEvent,
-  shipInfo: {shipDirection: string; shipLength: string; segmentIndex: number }
+// Define a helper function to calculate placement values
+function calculatePlacement(
+  shipInfo: { shipDirection: any; shipLength: any; segmentIndex: any },
+  targetCell: HTMLElement
 ) {
-  event.preventDefault();
-  const targetCell = event.target as HTMLElement;
   const shipDirection = shipInfo.shipDirection;
   const shipLength = parseInt(shipInfo.shipLength || "");
   const segmentIndex = shipInfo.segmentIndex;
 
-  let row = parseInt(targetCell.dataset.row || "");
-  let col = parseInt(targetCell.dataset.col || "");
+  const row = parseInt(targetCell.dataset.row || "");
+  const col = parseInt(targetCell.dataset.col || "");
 
   if (shipDirection === "horizontal") {
-    col -= segmentIndex;
+    return { shipDirection, shipLength, row, col: col - segmentIndex };
   } else {
-    row -= segmentIndex;
+    return { shipDirection, shipLength, row: row - segmentIndex, col };
   }
+}
+
+export function handleDragOver(
+  event: DragEvent,
+  shipInfo: { shipDirection: string; shipLength: string; segmentIndex: number }
+) {
+  event.preventDefault();
+  const targetCell = event.target as HTMLElement;
+  const { shipDirection, shipLength, row, col } = calculatePlacement(
+    shipInfo,
+    targetCell
+  );
 
   const cellsToHighlight = getCellsToHighlight(
     shipDirection,
@@ -94,24 +104,18 @@ export function handleShipDragEnd(segment: HTMLElement, shipItem: HTMLElement) {
 
 export function handleDrop(
   event: DragEvent,
-  shipInfo: {shipDirection: any; shipLength: string; segmentIndex: number },
+  shipInfo: { shipDirection: any; shipLength: string; segmentIndex: number },
   game: Game
 ) {
   event.preventDefault();
   const targetCell = event.target as HTMLElement;
   targetCell.classList.remove("drag-over");
-   const shipDirection = shipInfo.shipDirection;
-   const shipLength = parseInt(shipInfo.shipLength || "");
-   const segmentIndex = shipInfo.segmentIndex;
 
-   let row = parseInt(targetCell.dataset.row || "");
-   let col = parseInt(targetCell.dataset.col || "");
+  const { shipDirection, shipLength, row, col } = calculatePlacement(
+    shipInfo,
+    targetCell
+  );
 
-   if (shipDirection === "horizontal") {
-     col -= segmentIndex;
-   } else {
-     row -= segmentIndex;
-   }
   if (
     game.player.gameboard.isValidPlacement(shipLength, row, col, shipDirection)
   ) {

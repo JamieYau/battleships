@@ -41,8 +41,8 @@ form.addEventListener("submit", (event) => {
     ) as NodeListOf<HTMLDivElement>;
     segments.forEach((segment) => {
       segment.addEventListener("mousedown", () => {
-        shipItem.addEventListener("dragstart", (event) => {
-          shipInfo = handleShipDragStart(event, shipItem, segment);
+        shipItem.addEventListener("dragstart", () => {
+          shipInfo = handleShipDragStart(shipItem, segment);
         });
 
         shipItem.addEventListener("dragend", () => {
