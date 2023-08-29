@@ -5,6 +5,7 @@ import {
   OverlapError,
   RepeatAttemptError,
 } from "../errors/Error";
+import { Direction } from "../types";
 
 interface Cell {
   hasShip: boolean;
@@ -44,7 +45,7 @@ export default class Gameboard {
     shipLength: number,
     row: number,
     col: number,
-    direction: "horizontal" | "vertical"
+    direction: Direction
   ) {
     // Check for out-of-bounds placement
     if (
@@ -111,7 +112,7 @@ export default class Gameboard {
     ship: Ship,
     row: number,
     col: number,
-    direction: "horizontal" | "vertical"
+    direction: Direction
   ) {
     if (this.isValidPlacement(ship.length, row, col, direction)) {
       if (direction === "horizontal") {
@@ -130,11 +131,34 @@ export default class Gameboard {
     return false;
   }
 
+  moveShip(
+    shipId: string,
+    direction: Direction,
+    newRow: number,
+    newCol: number
+  ) {
+    const shipToMove = this.#ships.find((ship) => ship.id === shipId);
+
+    if (!shipToMove) {
+      throw new Error("Ship not found");
+    }
+
+    // Remove ship from its current position
+    shipToMove.coords.forEach(([row, col]) => {
+      this.#board[row][col].hasShip = false;
+    });
+
+    // Place ship in the new position using the placeShip method
+    this.placeShip(shipToMove, newRow, newCol, direction);
+
+    return true;
+  }
+
   setCoords(
     ship: Ship,
     startRow: number,
     startCol: number,
-    direction: "horizontal" | "vertical"
+    direction: Direction
   ) {
     for (let i = 0; i < ship.length; i++) {
       const row = direction === "vertical" ? startRow + i : startRow;

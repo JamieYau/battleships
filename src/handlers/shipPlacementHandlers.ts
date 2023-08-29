@@ -1,4 +1,5 @@
 import Game from "../modules/Game";
+import { Direction } from "../types";
 
 export function handleSegmentMouseDown(event: MouseEvent) {
   return event.target as HTMLElement;
@@ -53,7 +54,7 @@ function calculatePlacement(
   const shipItem = document.querySelector(
     `[data-id="${shipInfo.shipId}"]`
   ) as HTMLElement;
-  const shipDirection: "horizontal" | "vertical" = shipItem!.classList.contains(
+  const shipDirection: Direction = shipItem!.classList.contains(
     "horizontal"
   )
     ? "horizontal"
