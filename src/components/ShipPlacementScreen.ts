@@ -17,6 +17,8 @@ function generateShip(ship: Ship): HTMLDivElement {
   const shipItem = document.createElement("div");
   shipItem.classList.add("ship-item");
   shipItem.classList.add("horizontal");
+  shipItem.dataset.id = ship.id.toString();
+  shipItem.draggable = true;
   shipItem.dataset.shipLength = ship.length.toString();
   for (let i = 0; i < ship.length; i++) {
     const shipSegment = document.createElement("div");
@@ -30,14 +32,11 @@ function generateShip(ship: Ship): HTMLDivElement {
 
 function generateShipList(): void {
   const shipList = Game.shipList;
-  const shipListContainer = document.getElementById("ship-list");
-  if (!shipListContainer) return;
-  for (let i = 0; i < shipList.length; i++) {
-    const shipItem = generateShip(shipList[i]);
-    shipItem.dataset.id = i.toString();
-    shipItem.draggable = true;
+  const shipListContainer = document.getElementById("ship-list")!;
+  shipList.forEach((ship) => {
+    const shipItem = generateShip(ship);
     shipListContainer.appendChild(shipItem);
-  }
+  });
 }
 
 export function showShipPlacementScreen(playerName: string): void {
