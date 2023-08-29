@@ -147,8 +147,10 @@ export function handleDrop(
 
     // Position the ship-item within the cell container
     shipItem.style.position = "absolute";
-    shipItem.style.top = "0";
-    shipItem.style.left = "0";
+    const styles = window.getComputedStyle(document.querySelector("#placement-grid")!);
+
+    shipItem.style.top = `-${parseInt(styles.getPropertyValue("grid-gap"))! / 2}px`;
+    shipItem.style.left = `-${parseInt(styles.getPropertyValue("grid-gap"))!}px`;
     // Handle ship placement here
     console.log(`row: ${row}, col: ${col}`);
     console.log(`shipLength: ${shipLength}`);
