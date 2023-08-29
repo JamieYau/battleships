@@ -119,6 +119,7 @@ button:focus-visible {
   width: var(--cell-size);
   height: var(--cell-size);
   background-color: #ccc;
+  position: relative;
   cursor: pointer;
 
   &.drag-over {
@@ -146,6 +147,7 @@ button:focus-visible {
   border-radius: 50px;
   padding: 4px;
   gap: var(--cell-gap);
+  z-index: 100;
 }
 
 /* Style for individual ship segments */

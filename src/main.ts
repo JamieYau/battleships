@@ -30,7 +30,7 @@ form.addEventListener("submit", (event) => {
   // Show the ship placement screen UI
   showShipPlacementScreen(playerName);
 
-  let shipInfo: { shipDirection: string; shipLength: string; segmentIndex: number; } | null = null; // Declare shipInfo outside of the event listeners
+  let shipInfo: { shipId: string; segmentIndex: number; } | null = null; // Declare shipInfo outside of the event listeners
 
   // Attach event listeners for ship items
   const shipItems = document.querySelectorAll(

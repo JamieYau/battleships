@@ -12,12 +12,9 @@ export function handleShipDragStart(
   shipItem.classList.add("dragging");
 
   const segmentIndex = parseInt(segment.dataset.index || "");
-  const shipDirection = shipItem.classList.contains("horizontal")
-    ? "horizontal"
-    : "vertical";
-  const shipLength = shipItem.dataset.shipLength || "";
+  const shipId = shipItem.dataset.id || "";
 
-  return { shipDirection, shipLength, segmentIndex };
+  return { shipId, segmentIndex };
 }
 
 // Helper function to get cells to highlight
@@ -50,11 +47,18 @@ function getCellsToHighlight(
 
 // Define a helper function to calculate placement values
 function calculatePlacement(
-  shipInfo: { shipDirection: any; shipLength: any; segmentIndex: any },
+  shipInfo: { shipId: string; segmentIndex: any },
   targetCell: HTMLElement
 ) {
-  const shipDirection = shipInfo.shipDirection;
-  const shipLength = parseInt(shipInfo.shipLength || "");
+  const shipItem = document.querySelector(
+    `[data-id="${shipInfo.shipId}"]`
+  ) as HTMLElement;
+  const shipDirection: "horizontal" | "vertical" = shipItem!.classList.contains(
+    "horizontal"
+  )
+    ? "horizontal"
+    : "vertical";
+  const shipLength = parseInt(shipItem!.dataset.shipLength || "");
   const segmentIndex = shipInfo.segmentIndex;
 
   const row = parseInt(targetCell.dataset.row || "");
@@ -69,7 +73,7 @@ function calculatePlacement(
 
 export function handleDragOver(
   event: DragEvent,
-  shipInfo: { shipDirection: string; shipLength: string; segmentIndex: number }
+  shipInfo: { shipId: string; segmentIndex: number }
 ) {
   event.preventDefault();
   const targetCell = event.target as HTMLElement;
@@ -111,7 +115,7 @@ export function handleShipDragEnd(segment: HTMLElement, shipItem: HTMLElement) {
 
 export function handleDrop(
   event: DragEvent,
-  shipInfo: { shipDirection: any; shipLength: string; segmentIndex: number },
+  shipInfo: { shipId: string; segmentIndex: number },
   game: Game
 ) {
   event.preventDefault();
@@ -131,21 +135,35 @@ export function handleDrop(
   if (
     game.player.gameboard.isValidPlacement(shipLength, row, col, shipDirection)
   ) {
+    // Remove the ship-item from its original container
+    const shipItem = document.querySelector(
+      `[data-id="${shipInfo.shipId}"]`
+    ) as HTMLElement;
+    shipItem?.remove();
+
+    // Append the ship-item to the new cell's container
+    const firstCell = document.querySelector(`[data-row="${row}"][data-col="${col}"]`) as HTMLElement;
+    firstCell.appendChild(shipItem);
+
+    // Position the ship-item within the cell container
+    shipItem.style.position = "absolute";
+    shipItem.style.top = "0";
+    shipItem.style.left = "0";
     // Handle ship placement here
     console.log(`row: ${row}, col: ${col}`);
     console.log(`shipLength: ${shipLength}`);
-    const cellsToHighlight = getCellsToHighlight(
-      shipDirection,
-      shipLength,
-      row,
-      col
-    );
 
-    cellsToHighlight.forEach((cell) => {
-      if (cell) {
-        cell.classList.add("ship");
-      }
-    });
+    // const cellsToHighlight = getCellsToHighlight(
+    //   shipDirection,
+    //   shipLength,
+    //   row,
+    //   col
+    // );
+    // cellsToHighlight.forEach((cell) => {
+    //   if (cell) {
+    //     cell.classList.add("ship");
+    //   }
+    // });
   } else {
     console.log("Invalid placement");
   }
