@@ -151,9 +151,6 @@ export function handleDrop(
 
     shipItem.style.top = `-${parseInt(styles.getPropertyValue("grid-gap"))! / 2}px`;
     shipItem.style.left = `-${parseInt(styles.getPropertyValue("grid-gap"))!}px`;
-    // Handle ship placement here
-    console.log(`row: ${row}, col: ${col}`);
-    console.log(`shipLength: ${shipLength}`);
 
     // const cellsToHighlight = getCellsToHighlight(
     //   shipDirection,

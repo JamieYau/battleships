@@ -3,11 +3,13 @@
     "browser": true,
     "es2021": true
   },
-  "extends": ["standard-with-typescript", "prettier"],
+  "extends": ["airbnb-typescript/base", "prettier"],
   "parserOptions": {
+    "project": "./tsconfig.json",
     "ecmaVersion": "latest",
     "sourceType": "module"
   },
+  "plugins": ["@typescript-eslint", "import"],
   "rules": {
     "no-console": "off"
   }

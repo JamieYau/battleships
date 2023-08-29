@@ -4,6 +4,7 @@ import Ship from "./Ship";
 
 export default class AI extends Player {
   static #AI_NAME = "AI";
+
   #availableMoves: [number, number][]; // Set to store available moves
 
   constructor() {

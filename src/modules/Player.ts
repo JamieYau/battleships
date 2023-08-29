@@ -2,9 +2,10 @@ import Gameboard from "./Gameboard";
 
 export default class Player {
   #name: string;
+
   #gameboard: Gameboard;
 
-  constructor(name: string = "Player", gameboard: Gameboard) {
+  constructor(name: string, gameboard: Gameboard) {
     // If name is blank, set it to "Player"
     this.#name = name.trim() === "" ? "Player" : name;
     this.#gameboard = gameboard;

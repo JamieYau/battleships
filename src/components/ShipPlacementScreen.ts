@@ -1,21 +1,5 @@
 import { Game } from "../modules/Game";
 import Ship from "../modules/Ship";
-export function showShipPlacementScreen(playerName: string): void {
-  const container = document.getElementById("app");
-  if (!container) return;
-
-  const template = `
-    <div id="placement-container">
-        <h1>Place Your Ships ${playerName}</h1>
-        <div id="placement-grid" class="grid-container">
-            ${generateGridCells()}
-        </div>
-        <div id="ship-list"></div>
-    </div>
-  `;
-  container.innerHTML = template;
-  generateShipList();
-}
 
 function generateGridCells(): string {
   let gridCells = "";
@@ -25,18 +9,6 @@ function generateGridCells(): string {
     }
   }
   return gridCells;
-}
-
-function generateShipList(): void {
-  const shipList = Game.shipList;
-  const shipListContainer = document.getElementById("ship-list");
-  if (!shipListContainer) return;
-  for (let i = 0; i < shipList.length; i++) {
-    const shipItem = generateShip(shipList[i]);
-    shipItem.dataset.id = i.toString();
-    shipItem.draggable = true;
-    shipListContainer.appendChild(shipItem);
-  }
 }
 
 function generateShip(ship: Ship): HTMLDivElement {
@@ -54,4 +26,33 @@ function generateShip(ship: Ship): HTMLDivElement {
     shipItem.appendChild(shipSegment);
   }
   return shipItem;
+}
+
+function generateShipList(): void {
+  const shipList = Game.shipList;
+  const shipListContainer = document.getElementById("ship-list");
+  if (!shipListContainer) return;
+  for (let i = 0; i < shipList.length; i++) {
+    const shipItem = generateShip(shipList[i]);
+    shipItem.dataset.id = i.toString();
+    shipItem.draggable = true;
+    shipListContainer.appendChild(shipItem);
+  }
+}
+
+export function showShipPlacementScreen(playerName: string): void {
+  const container = document.getElementById("app");
+  if (!container) return;
+
+  const template = `
+    <div id="placement-container">
+        <h1>Place Your Ships ${playerName}</h1>
+        <div id="placement-grid" class="grid-container">
+            ${generateGridCells()}
+        </div>
+        <div id="ship-list"></div>
+    </div>
+  `;
+  container.innerHTML = template;
+  generateShipList();
 }

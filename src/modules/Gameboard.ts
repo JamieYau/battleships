@@ -13,7 +13,9 @@ interface Cell {
 
 export default class Gameboard {
   #board: Cell[][];
+
   static #BOARDSIZE: number = 10;
+
   #ships: Ship[] = [];
 
   constructor() {
@@ -59,9 +61,7 @@ export default class Gameboard {
     // Check for ship overlap
     if (
       direction === "horizontal" &&
-      this.#board[row]
-        .slice(col, col + shipLength)
-        .some((cell) => cell.hasShip)
+      this.#board[row].slice(col, col + shipLength).some((cell) => cell.hasShip)
     ) {
       throw new OverlapError();
     } else if (direction === "vertical") {
@@ -160,10 +160,10 @@ export default class Gameboard {
     }
     if (cell.hasShip) {
       cell.state = "hit";
-      const ship = this.#ships.find((ship) =>
+      const shipToFind = this.#ships.find((ship) =>
         ship.coords.some((coord) => coord[0] === row && coord[1] === col)
       );
-      ship?.hit();
+      shipToFind?.hit();
     } else {
       cell.state = "miss";
     }

@@ -5,9 +5,13 @@ import Ship from "./Ship";
 
 export default class Game {
   #player: Player;
+
   #ai: AI;
+
   #currentPlayer: Player | AI;
+
   #winner: Player | AI | null;
+
   static #DEFAULT_SHIPS: Ship[] = [
     new Ship(5),
     new Ship(4),

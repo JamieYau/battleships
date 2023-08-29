@@ -58,16 +58,16 @@ form.addEventListener("submit", (event) => {
     ".grid-cell"
   ) as NodeListOf<HTMLDivElement>;
   gridCells.forEach((cell) => {
-    cell.addEventListener("dragover", (event) => {
+    cell.addEventListener("dragover", (e: DragEvent) => {
       if (!shipInfo) return;
-      handleDragOver(event, shipInfo);
+      handleDragOver(e, shipInfo);
     });
     cell.addEventListener("dragleave", () => {
       handleDragLeave();
     });
-    cell.addEventListener("drop", (event) => {
+    cell.addEventListener("drop", (e : DragEvent) => {
       if (!shipInfo) return;
-      handleDrop(event, shipInfo, game);
+      handleDrop(e, shipInfo, game);
       shipInfo = null;
     });
   });
