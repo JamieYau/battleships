@@ -16,10 +16,10 @@ function generateShip(ship: Ship): HTMLDivElement {
 
   const shipItem = document.createElement("div");
   shipItem.classList.add("ship-item");
-  shipItem.classList.add("horizontal");
   shipItem.dataset.id = ship.id.toString();
-  shipItem.draggable = true;
   shipItem.dataset.shipLength = ship.length.toString();
+  shipItem.dataset.shipDirection = ship.direction;
+  shipItem.draggable = true;
   for (let i = 0; i < ship.length; i++) {
     const shipSegment = document.createElement("div");
     shipSegment.classList.add("ship-segment");

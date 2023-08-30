@@ -1,5 +1,6 @@
 import { ShipSizeError } from "../errors/Error";
 import { v4 as uuidv4 } from "uuid";
+import { Direction } from "../types";
 
 export default class Ship {
   static #MIN_LENGTH = 1;
@@ -16,6 +17,8 @@ export default class Ship {
 
   #coords: number[][];
 
+  #direction: Direction;
+
   constructor(length: number) {
     if (length < Ship.#MIN_LENGTH || length > Ship.#MAX_LENGTH) {
       throw new ShipSizeError(Ship.#MIN_LENGTH, Ship.#MAX_LENGTH);
@@ -25,6 +28,7 @@ export default class Ship {
     this.#hits = 0;
     this.#isSunk = false;
     this.#coords = [];
+    this.#direction = "horizontal";
   }
 
   get id() {
@@ -55,5 +59,13 @@ export default class Ship {
 
   get coords() {
     return this.#coords;
+  }
+
+  set direction(direction: Direction) {
+    this.#direction = direction;
+  }
+
+  get direction() {
+    return this.#direction;
   }
 }

@@ -54,11 +54,7 @@ function calculatePlacement(
   const shipItem = document.querySelector(
     `[data-id="${shipInfo.shipId}"]`
   ) as HTMLElement;
-  const shipDirection: Direction = shipItem!.classList.contains(
-    "horizontal"
-  )
-    ? "horizontal"
-    : "vertical";
+  const shipDirection: Direction = shipItem!.dataset.shipDirection as Direction;
   const shipLength = parseInt(shipItem!.dataset.shipLength || "");
   const segmentIndex = shipInfo.segmentIndex;
 
@@ -143,15 +139,23 @@ export function handleDrop(
     shipItem?.remove();
 
     // Append the ship-item to the new cell's container
-    const firstCell = document.querySelector(`[data-row="${row}"][data-col="${col}"]`) as HTMLElement;
+    const firstCell = document.querySelector(
+      `[data-row="${row}"][data-col="${col}"]`
+    ) as HTMLElement;
     firstCell.appendChild(shipItem);
 
     // Position the ship-item within the cell container
     shipItem.style.position = "absolute";
-    const styles = window.getComputedStyle(document.querySelector("#placement-grid")!);
+    const styles = window.getComputedStyle(
+      document.querySelector("#placement-grid")!
+    );
 
-    shipItem.style.top = `-${parseInt(styles.getPropertyValue("grid-gap"))! / 2}px`;
-    shipItem.style.left = `-${parseInt(styles.getPropertyValue("grid-gap"))!}px`;
+    shipItem.style.top = `-${
+      parseInt(styles.getPropertyValue("grid-gap"))! / 2
+    }px`;
+    shipItem.style.left = `-${parseInt(
+      styles.getPropertyValue("grid-gap")
+    )!}px`;
 
     // const cellsToHighlight = getCellsToHighlight(
     //   shipDirection,

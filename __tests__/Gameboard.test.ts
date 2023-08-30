@@ -1,12 +1,7 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import Gameboard from "../src/modules/Gameboard";
 import Ship from "../src/modules/Ship";
-import {
-  OutOfBoundsError,
-  OverlapError,
-  AdjacentError,
-  RepeatAttemptError,
-} from "../src/errors/Error";
+import { OutOfBoundsError, RepeatAttemptError } from "../src/errors/Error";
 
 describe("Gameboard Class", () => {
   let gameboard: Gameboard;
@@ -101,82 +96,73 @@ describe("Gameboard Class", () => {
       });
     });
     describe("out of bounds", () => {
-      it("throws an error if a horizontal ship is placed outside the board", () => {
+      it("returns false if a horizontal ship is placed outside the board", () => {
         const ship = new Ship(2);
-
-        expect(() =>
-          gameboard.placeShip(ship, 0, 9, "horizontal")
-        ).toThrowError(OutOfBoundsError);
+        const result = gameboard.placeShip(ship, 0, 9, "horizontal");
+        expect(result).toBe(false);
       });
 
-      it("throws an error if a vertical ship is placed outside the board", () => {
+      it("returns false if a vertical ship is placed outside the board", () => {
         const ship = new Ship(2);
 
-        expect(() => gameboard.placeShip(ship, 9, 0, "vertical")).toThrowError(
-          OutOfBoundsError
-        );
+        const result = gameboard.placeShip(ship, 9, 0, "vertical");
+        expect(result).toBe(false);
       });
     });
     describe("ship overlap", () => {
-      it("throws an error if a horizontal ship is placed on top of another ship", () => {
+      it("returns false if a horizontal ship is placed on top of another ship", () => {
         const ship = new Ship(2);
         gameboard.placeShip(ship, 0, 0, "horizontal");
 
         const newShip = new Ship(5);
-        expect(() =>
-          gameboard.placeShip(newShip, 0, 0, "horizontal")
-        ).toThrowError(OverlapError);
+        const result = gameboard.placeShip(newShip, 0, 0, "horizontal");
+        expect(result).toBe(false);
       });
 
-      it("throws an error if a vertical ship is placed on top of another ship", () => {
+      it("returns false if a vertical ship is placed on top of another ship", () => {
         const ship = new Ship(2);
         gameboard.placeShip(ship, 0, 0, "vertical");
 
         const newShip = new Ship(5);
-        expect(() =>
-          gameboard.placeShip(newShip, 0, 0, "vertical")
-        ).toThrowError(OverlapError);
+        const result = gameboard.placeShip(newShip, 0, 0, "vertical");
+        expect(result).toBe(false);
       });
     });
     describe("adjacent ships", () => {
-      it("throws an error if a horizontal ship is placed adjacent to another ship", () => {
+      it("returns false if a horizontal ship is placed adjacent to another ship", () => {
         const ship = new Ship(2);
         gameboard.placeShip(ship, 0, 0, "horizontal");
 
         const newShip = new Ship(5);
-        expect(() =>
-          gameboard.placeShip(newShip, 1, 0, "horizontal")
-        ).toThrowError(AdjacentError);
+        const result = gameboard.placeShip(newShip, 1, 0, "horizontal");
+        expect(result).toBe(false);
       });
 
-      it("throws an error if a vertical ship is placed adjacent to another ship", () => {
+      it("returns false if a vertical ship is placed adjacent to another ship", () => {
         const ship = new Ship(2);
         gameboard.placeShip(ship, 0, 0, "vertical");
 
         const newShip = new Ship(5);
-        expect(() =>
-          gameboard.placeShip(newShip, 0, 1, "vertical")
-        ).toThrowError(AdjacentError);
+        const result = gameboard.placeShip(newShip, 0, 1, "vertical");
+        expect(result).toBe(false);
       });
 
-      it("throws an error if a horizontal ship is placed diagonally adjacent to another ship", () => {
+      it("returns false if a horizontal ship is placed diagonally adjacent to another ship", () => {
         const ship = new Ship(2);
         gameboard.placeShip(ship, 0, 0, "horizontal");
 
         const newShip = new Ship(5);
-        expect(() =>
-          gameboard.placeShip(newShip, 1, 1, "horizontal")
-        ).toThrowError(AdjacentError);
+        const result = gameboard.placeShip(newShip, 1, 1, "horizontal");
+        expect(result).toBe(false);
       });
 
-      it("throws an error if a vertical ship is placed diagonally adjacent to another ship", () => {
+      it("returns false if a vertical ship is placed diagonally adjacent to another ship", () => {
         const ship = new Ship(2);
         gameboard.placeShip(ship, 0, 0, "vertical");
 
         const newShip = new Ship(5);
-        expect(() =>
-          gameboard.placeShip(newShip, 1, 1, "vertical")
-        ).toThrowError(AdjacentError);
+        const result = gameboard.placeShip(newShip, 1, 1, "vertical");
+        expect(result).toBe(false);
       });
     });
   });
@@ -235,6 +221,63 @@ describe("Gameboard Class", () => {
 
     it("returns true if there are no ships", () => {
       expect(gameboard.allSunk()).toBe(true);
+    });
+  });
+  describe("moveShip", () => {
+    it("moves a ship to a new position", () => {
+      const ship = new Ship(2);
+      gameboard.placeShip(ship, 0, 0, "horizontal");
+      gameboard.moveShip(ship.id, 3, 3, "vertical");
+      expect(ship.coords).toEqual([
+        [3, 3],
+        [4, 3],
+      ]);
+    });
+
+    it("doesn't allow moving a ship out of bounds", () => {
+      const ship = new Ship(2);
+      gameboard.placeShip(ship, 0, 0, "horizontal");
+
+      const result = gameboard.moveShip(ship.id, 0, 9, "horizontal");
+      expect(result).toBe(false);
+    });
+
+    it("doesn't allow moving a ship on top of another ship", () => {
+      const ship1 = new Ship(2);
+      const ship2 = new Ship(2);
+      gameboard.placeShip(ship1, 0, 0, "horizontal");
+      gameboard.placeShip(ship2, 2, 2, "vertical");
+
+      const result = gameboard.moveShip(ship2.id, 0, 0, "horizontal");
+      expect(result).toBe(false);
+    });
+
+    it("doesn't allow moving a ship adjacent to another ship", () => {
+      const ship1 = new Ship(2);
+      const ship2 = new Ship(2);
+      gameboard.placeShip(ship1, 0, 0, "horizontal");
+      gameboard.placeShip(ship2, 2, 2, "vertical");
+
+      const result = gameboard.moveShip(ship2.id, 1, 0, "horizontal");
+      expect(result).toBe(false);
+    });
+
+    it("should move the ship back to it's original position if invalid move", () => {
+      const ship = new Ship(4);
+      gameboard.placeShip(ship, 0, 0, "horizontal");
+
+      gameboard.moveShip(ship.id, 0, 9, "horizontal");
+
+      expect(ship.coords).toEqual([
+        [0, 0],
+        [0, 1],
+        [0, 2],
+        [0, 3],
+      ]);
+      expect(gameboard.board[0][0].hasShip).toBe(true);
+      expect(gameboard.board[0][1].hasShip).toBe(true);
+      expect(gameboard.board[0][2].hasShip).toBe(true);
+      expect(gameboard.board[0][3].hasShip).toBe(true);
     });
   });
 });

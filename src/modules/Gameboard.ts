@@ -108,18 +108,16 @@ export default class Gameboard {
     return true; // If no errors were thrown, placement is valid
   }
 
-  placeShip(
-    ship: Ship,
-    row: number,
-    col: number,
-    direction: Direction
-  ) {
-    if (this.isValidPlacement(ship.length, row, col, direction)) {
+  placeShip(ship: Ship, row: number, col: number, direction: Direction) {
+    try {
+      this.isValidPlacement(ship.length, row, col, direction);
       if (direction === "horizontal") {
+        ship.direction = "horizontal";
         for (let i = 0; i < ship.length; i++) {
           this.#board[row][col + i].hasShip = true;
         }
       } else {
+        ship.direction = "vertical";
         for (let i = 0; i < ship.length; i++) {
           this.#board[row + i][col].hasShip = true;
         }
@@ -127,15 +125,16 @@ export default class Gameboard {
       this.setCoords(ship, row, col, direction);
       this.#ships.push(ship);
       return true;
+    } catch (error) {
+      return false;
     }
-    return false;
   }
 
   moveShip(
     shipId: string,
-    direction: Direction,
     newRow: number,
-    newCol: number
+    newCol: number,
+    direction: Direction
   ) {
     const shipToMove = this.#ships.find((ship) => ship.id === shipId);
 
@@ -143,14 +142,25 @@ export default class Gameboard {
       throw new Error("Ship not found");
     }
 
+    const prevRow = shipToMove.coords[0][0]; // Store the previous row
+    const prevCol = shipToMove.coords[0][1]; // Store the previous column
+    const prevDirection = shipToMove.direction; // Store the previous direction
+
     // Remove ship from its current position
     shipToMove.coords.forEach(([row, col]) => {
       this.#board[row][col].hasShip = false;
     });
+    shipToMove.coords = [];
+    this.#ships = this.#ships.filter((ship) => ship.id !== shipId);
 
-    // Place ship in the new position using the placeShip method
-    this.placeShip(shipToMove, newRow, newCol, direction);
+    // Attempt to place ship in the new position
+    const success = this.placeShip(shipToMove, newRow, newCol, direction);
 
+    if (!success) {
+      // If placement is invalid, place ship back in its original position
+      this.placeShip(shipToMove, prevRow, prevCol, prevDirection);
+      return false;
+    }
     return true;
   }
 
