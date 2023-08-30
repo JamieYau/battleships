@@ -122,16 +122,17 @@ export function handleDrop(
     cell.classList.remove("drag-over");
   });
 
-  const targetCell = event.target as HTMLElement;
+  const targetCell = (event.target as Element)!.closest(
+    ".grid-cell"
+  ) as HTMLElement;
 
   const { shipDirection, shipLength, row, col } = calculatePlacement(
     shipInfo,
     targetCell
   );
 
-  if (
-    game.player.gameboard.isValidPlacement(shipLength, row, col, shipDirection)
-  ) {
+  const ship = Game.shipList.find((s) => s.id === shipInfo.shipId)!;
+  if (game.player.gameboard.placeShip(ship, row, col, shipDirection)) {
     // Remove the ship-item from its original container
     const shipItem = document.querySelector(
       `[data-id="${shipInfo.shipId}"]`
@@ -168,7 +169,5 @@ export function handleDrop(
     //     cell.classList.add("ship");
     //   }
     // });
-  } else {
-    console.log("Invalid placement");
   }
 }

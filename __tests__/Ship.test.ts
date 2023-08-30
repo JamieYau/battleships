@@ -3,6 +3,13 @@ import Ship from "../src/modules/Ship";
 import { ShipSizeError } from "../src/errors/Error";
 
 describe("Ship Factory Function", () => {
+  it("should create ships with direction horizontal", () => {
+    for (let i = 0; i < 100; i++) {
+      const ship = new Ship(3);
+      expect(ship.direction).toBe("horizontal");
+    }
+  });
+
   it("should return a ship object with initial properties", () => {
     const ship = new Ship(3);
     expect(ship.length).toBe(3);

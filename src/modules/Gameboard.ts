@@ -112,12 +112,10 @@ export default class Gameboard {
     try {
       this.isValidPlacement(ship.length, row, col, direction);
       if (direction === "horizontal") {
-        ship.direction = "horizontal";
         for (let i = 0; i < ship.length; i++) {
           this.#board[row][col + i].hasShip = true;
         }
       } else {
-        ship.direction = "vertical";
         for (let i = 0; i < ship.length; i++) {
           this.#board[row + i][col].hasShip = true;
         }
@@ -130,7 +128,7 @@ export default class Gameboard {
     }
   }
 
-  removeShip(ship:Ship) {
+  removeShip(ship: Ship) {
     ship.coords.forEach(([row, col]) => {
       this.#board[row][col].hasShip = false;
     });

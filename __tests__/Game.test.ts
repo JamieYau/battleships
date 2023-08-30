@@ -38,6 +38,26 @@ describe("Game", () => {
 
       expect(game.winner).toBe(null);
     });
+
+    it("should have the correct default ships", () => {
+      const playerName = "John";
+      const gameboard = new Gameboard();
+      const game = new Game(playerName, gameboard);
+
+      expect(game.ai.gameboard.ships.length).toBe(6);
+      expect(game.ai.gameboard.ships[0].length).toBe(5);
+      expect(game.ai.gameboard.ships[1].length).toBe(4);
+      expect(game.ai.gameboard.ships[2].length).toBe(3);
+      expect(game.ai.gameboard.ships[3].length).toBe(2);
+      expect(game.ai.gameboard.ships[4].length).toBe(2);
+      expect(game.ai.gameboard.ships[5].length).toBe(1);
+
+      const allHorizontal = Game.shipList.every(
+        (ship) => ship.direction === "horizontal"
+      );
+
+      expect(allHorizontal).toBe(true);
+    });
   });
 
   describe("switchTurn", () => {
