@@ -164,7 +164,7 @@ export function handleDrop(
     ".grid-cell"
   ) as HTMLElement;
 
-  const { shipDirection, shipLength, row, col } = calculatePlacement(
+  const { shipDirection, row, col } = calculatePlacement(
     shipInfo,
     targetCell
   );
@@ -195,19 +195,5 @@ export function handleDrop(
     shipItem.style.left = `-${parseInt(
       styles.getPropertyValue("grid-gap")
     )!}px`;
-
-    const { shipCells, adjacentCells } = getCellsToHighlight(
-      shipDirection,
-      shipLength,
-      row,
-      col
-    );
-    shipCells.forEach((cell) => {
-      cell.classList.add("ship");
-    });
-
-    adjacentCells.forEach((cell) => {
-      cell.classList.add("adjacent");
-    });
   }
 }
