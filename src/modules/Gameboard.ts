@@ -130,6 +130,14 @@ export default class Gameboard {
     }
   }
 
+  removeShip(ship:Ship) {
+    ship.coords.forEach(([row, col]) => {
+      this.#board[row][col].hasShip = false;
+    });
+    this.#ships = this.#ships.filter((s) => s.id !== ship.id);
+    ship.coords = [];
+  }
+
   moveShip(
     shipId: string,
     newRow: number,
@@ -147,11 +155,7 @@ export default class Gameboard {
     const prevDirection = shipToMove.direction; // Store the previous direction
 
     // Remove ship from its current position
-    shipToMove.coords.forEach(([row, col]) => {
-      this.#board[row][col].hasShip = false;
-    });
-    shipToMove.coords = [];
-    this.#ships = this.#ships.filter((ship) => ship.id !== shipId);
+    this.removeShip(shipToMove);
 
     // Attempt to place ship in the new position
     const success = this.placeShip(shipToMove, newRow, newCol, direction);
