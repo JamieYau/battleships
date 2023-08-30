@@ -18,14 +18,43 @@ export function handleShipDragStart(
   return { shipId, segmentIndex };
 }
 
+function getAdjacentCells(cells: HTMLElement[]) {
+  const adjacentCells: HTMLElement[] = [];
+  cells.forEach((cell) => {
+    const row = parseInt(cell.dataset.row || "");
+    const col = parseInt(cell.dataset.col || "");
+    const adjacentOffsets = [
+      [-1, 0],
+      [0, -1],
+      [0, 1],
+      [1, 0], // Up, left, right, down
+      [-1, -1],
+      [-1, 1],
+      [1, -1],
+      [1, 1], // Diagonals
+    ];
+    adjacentOffsets.forEach((offset) => {
+      const newRow = row + offset[0];
+      const newCol = col + offset[1];
+      const adjacentCell = document.querySelector(
+        `[data-row="${newRow}"][data-col="${newCol}"]`
+      ) as HTMLElement;
+      if (adjacentCell && !cells.includes(adjacentCell)) {
+        adjacentCells.push(adjacentCell);
+      }
+    });
+  });
+  return adjacentCells;
+}
+
 // Helper function to get cells to highlight
 function getCellsToHighlight(
   shipDirection: string,
   shipLength: number,
   row: number,
   col: number
-): HTMLElement[] {
-  const cellsToHighlight: HTMLElement[] = [];
+): { shipCells: HTMLElement[]; adjacentCells: HTMLElement[] } {
+  const shipCells: HTMLElement[] = [];
 
   for (let i = 0; i < shipLength; i++) {
     let cell: HTMLElement | null = null;
@@ -39,11 +68,13 @@ function getCellsToHighlight(
       );
     }
     if (cell) {
-      cellsToHighlight.push(cell);
+      shipCells.push(cell);
     }
   }
 
-  return cellsToHighlight;
+  const adjacentCells = getAdjacentCells(shipCells);
+
+  return { shipCells, adjacentCells };
 }
 
 // Define a helper function to calculate placement values
@@ -79,7 +110,7 @@ export function handleDragOver(
     targetCell
   );
 
-  const cellsToHighlight = getCellsToHighlight(
+  const { shipCells, adjacentCells } = getCellsToHighlight(
     shipDirection,
     shipLength,
     row,
@@ -93,8 +124,13 @@ export function handleDragOver(
   });
 
   // Add the 'drag-over' class to the cells to highlight
-  cellsToHighlight.forEach((cell) => {
+  shipCells.forEach((cell) => {
     cell.classList.add("drag-over");
+  });
+
+  // Add the 'adjacent' class to the cells to highlight
+  adjacentCells.forEach((cell) => {
+    cell.classList.add("adjacent");
   });
 }
 
@@ -102,6 +138,7 @@ export function handleDragLeave() {
   const gridCells = document.querySelectorAll(".grid-cell");
   gridCells.forEach((cell) => {
     cell.classList.remove("drag-over");
+    cell.classList.remove("adjacent");
   });
 }
 
@@ -120,6 +157,7 @@ export function handleDrop(
   const gridCells = document.querySelectorAll(".grid-cell");
   gridCells.forEach((cell) => {
     cell.classList.remove("drag-over");
+    cell.classList.remove("adjacent");
   });
 
   const targetCell = (event.target as Element)!.closest(
@@ -158,16 +196,18 @@ export function handleDrop(
       styles.getPropertyValue("grid-gap")
     )!}px`;
 
-    // const cellsToHighlight = getCellsToHighlight(
-    //   shipDirection,
-    //   shipLength,
-    //   row,
-    //   col
-    // );
-    // cellsToHighlight.forEach((cell) => {
-    //   if (cell) {
-    //     cell.classList.add("ship");
-    //   }
-    // });
+    const { shipCells, adjacentCells } = getCellsToHighlight(
+      shipDirection,
+      shipLength,
+      row,
+      col
+    );
+    shipCells.forEach((cell) => {
+      cell.classList.add("ship");
+    });
+
+    adjacentCells.forEach((cell) => {
+      cell.classList.add("adjacent");
+    });
   }
 }

@@ -126,6 +126,10 @@ button:focus-visible {
     background-color: #646cff;
   }
 
+  &.adjacent {
+    background-color: #fd5c34;
+  }
+
   &.ship {
     background-color: #2259b7;
   }
