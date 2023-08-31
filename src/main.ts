@@ -1,4 +1,5 @@
 import "./assets/style.css";
+import "@fortawesome/fontawesome-free/css/all.css";
 import { showStartScreen } from "./components/StartScreen";
 import { showShipPlacementScreen } from "./components/ShipPlacementScreen";
 import Gameboard from "./modules/Gameboard";

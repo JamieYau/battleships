@@ -104,7 +104,12 @@ button:focus-visible {
   align-items: center;
 
   h1 {
-    margin-bottom: 2em;
+    margin-bottom: 1em;
+  }
+
+  #rotate-btn {
+    margin-bottom: 1em;
+    padding: 0.6em;
   }
 }
 
@@ -140,7 +145,7 @@ button:focus-visible {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  margin-top: 20px;
+  margin: 20px;
 }
 
 /* Style for individual ship items */
