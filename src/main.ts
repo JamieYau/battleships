@@ -10,6 +10,7 @@ import {
   handleShipDragEnd,
   handleDrop,
   handleDragLeave,
+  handleRotate,
 } from "./handlers/shipPlacementHandlers";
 
 showStartScreen();
@@ -31,13 +32,17 @@ form.addEventListener("submit", (event) => {
   // Show the ship placement screen UI
   showShipPlacementScreen(playerName);
 
-  let shipInfo: { shipId: string; segmentIndex: number; } | null = null; // Declare shipInfo outside of the event listeners
+  let shipInfo: { shipId: string; segmentIndex: number|null } | null = null; // Declare shipInfo outside of the event listeners
 
   // Attach event listeners for ship items
   const shipItems = document.querySelectorAll(
     ".ship-item"
   ) as NodeListOf<HTMLDivElement>;
   shipItems.forEach((shipItem) => {
+    shipItem.addEventListener("click", () => {
+      shipInfo = { shipId: shipItem.dataset.id!, segmentIndex: null };
+      console.log(shipInfo);
+    });
     const segments = shipItem.querySelectorAll(
       ".ship-segment"
     ) as NodeListOf<HTMLDivElement>;
@@ -46,7 +51,6 @@ form.addEventListener("submit", (event) => {
         shipItem.addEventListener("dragstart", () => {
           shipInfo = handleShipDragStart(shipItem, segment);
         });
-
         shipItem.addEventListener("dragend", () => {
           handleShipDragEnd(segment, shipItem);
         });
@@ -66,10 +70,18 @@ form.addEventListener("submit", (event) => {
     cell.addEventListener("dragleave", () => {
       handleDragLeave();
     });
-    cell.addEventListener("drop", (e : DragEvent) => {
+    cell.addEventListener("drop", (e: DragEvent) => {
       if (!shipInfo) return;
       handleDrop(e, shipInfo, game);
       shipInfo = null;
     });
+  });
+
+  // Rotate btn
+  const rotateBtn = document.getElementById("rotate-btn") as HTMLButtonElement;
+  rotateBtn.addEventListener("click", () => {
+    if (shipInfo?.shipId != undefined) {
+      handleRotate(shipInfo?.shipId, game);
+    }
   });
 });

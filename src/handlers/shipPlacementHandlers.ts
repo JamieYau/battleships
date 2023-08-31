@@ -1,4 +1,5 @@
 import Game from "../modules/Game";
+import Ship from "../modules/Ship";
 import { Direction } from "../types";
 
 export function handleSegmentMouseDown(event: MouseEvent) {
@@ -79,7 +80,7 @@ function getCellsToHighlight(
 
 // Define a helper function to calculate placement values
 function calculatePlacement(
-  shipInfo: { shipId: string; segmentIndex: any },
+  shipInfo: { shipId: string; segmentIndex: number | null },
   targetCell: HTMLElement
 ) {
   const shipItem = document.querySelector(
@@ -87,7 +88,7 @@ function calculatePlacement(
   ) as HTMLElement;
   const shipDirection: Direction = shipItem!.dataset.shipDirection as Direction;
   const shipLength = parseInt(shipItem!.dataset.shipLength || "");
-  const segmentIndex = shipInfo.segmentIndex;
+  const segmentIndex = shipInfo.segmentIndex!;
 
   const row = parseInt(targetCell.dataset.row || "");
   const col = parseInt(targetCell.dataset.col || "");
@@ -101,7 +102,7 @@ function calculatePlacement(
 
 export function handleDragOver(
   event: DragEvent,
-  shipInfo: { shipId: string; segmentIndex: number }
+  shipInfo: { shipId: string; segmentIndex: number | null }
 ) {
   event.preventDefault();
   const targetCell = event.target as HTMLElement;
@@ -149,7 +150,7 @@ export function handleShipDragEnd(segment: HTMLElement, shipItem: HTMLElement) {
 
 export function handleDrop(
   event: DragEvent,
-  shipInfo: { shipId: string; segmentIndex: number },
+  shipInfo: { shipId: string; segmentIndex: number | null },
   game: Game
 ) {
   event.preventDefault();
@@ -164,12 +165,9 @@ export function handleDrop(
     ".grid-cell"
   ) as HTMLElement;
 
-  const { shipDirection, row, col } = calculatePlacement(
-    shipInfo,
-    targetCell
-  );
+  const { shipDirection, row, col } = calculatePlacement(shipInfo, targetCell);
 
-  const ship = Game.shipList.find((s) => s.id === shipInfo.shipId)!;
+  const ship = game.player.ships.find((s) => s.id === shipInfo.shipId)!;
   if (game.player.gameboard.placeShip(ship, row, col, shipDirection)) {
     // Remove the ship-item from its original container
     const shipItem = document.querySelector(
@@ -188,12 +186,36 @@ export function handleDrop(
     const styles = window.getComputedStyle(
       document.querySelector("#placement-grid")!
     );
+    if (shipDirection == "horizontal") {
+      shipItem.style.top = `-${
+        parseInt(styles.getPropertyValue("grid-gap"))! / 2
+      }px`;
+      shipItem.style.left = `-${parseInt(
+        styles.getPropertyValue("grid-gap")
+      )!}px`;
+    } else {
+      shipItem.style.top = `-${parseInt(
+        styles.getPropertyValue("grid-gap")
+      )!}px`;
+      shipItem.style.left = `-${
+        parseInt(styles.getPropertyValue("grid-gap"))! / 2
+      }px`;
+    }
+  }
+}
 
-    shipItem.style.top = `-${
-      parseInt(styles.getPropertyValue("grid-gap"))! / 2
-    }px`;
-    shipItem.style.left = `-${parseInt(
-      styles.getPropertyValue("grid-gap")
-    )!}px`;
+export function handleRotate(shipId: string, game: Game): void {
+  //change the direction on html element
+  const shipItem = document.querySelector(
+    `[data-id="${shipId}"]`
+  ) as HTMLDivElement;
+  const ship = game.player.ships.find((s) => s.id === shipId) as Ship;
+  const shipDirection = shipItem.dataset.shipDirection as Direction;
+  if (shipDirection === "horizontal") {
+    shipItem.dataset.shipDirection = "vertical";
+    ship.direction = "vertical";
+  } else {
+    shipItem.dataset.shipDirection = "horizontal";
+    ship.direction = "horizontal";
   }
 }

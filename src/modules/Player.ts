@@ -1,14 +1,18 @@
 import Gameboard from "./Gameboard";
+import Ship from "./Ship";
 
 export default class Player {
   #name: string;
 
   #gameboard: Gameboard;
 
+  #ships: Ship[];
+
   constructor(name: string, gameboard: Gameboard) {
     // If name is blank, set it to "Player"
     this.#name = name.trim() === "" ? "Player" : name;
     this.#gameboard = gameboard;
+    this.#ships = [];
   }
 
   get name() {
@@ -17,6 +21,10 @@ export default class Player {
 
   get gameboard() {
     return this.#gameboard;
+  }
+
+  get ships() {
+    return this.#ships;
   }
 
   takeTurn(enemyGameboard: Gameboard, row: number, col: number): boolean {
@@ -34,5 +42,9 @@ export default class Player {
 
   resetGameboard() {
     this.gameboard.reset();
+  }
+
+  set ships(ships: Ship[]) {
+    this.#ships = ships;
   }
 }

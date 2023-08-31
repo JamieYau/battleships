@@ -142,38 +142,56 @@ button:focus-visible {
 
 /* Style for the ship list */
 #ship-list {
-  display: flex;
-  flex-wrap: wrap;
   gap: 10px;
   margin: 20px;
 }
 
 /* Style for individual ship items */
 .ship-item {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   background-color: #2259b7;
   border-radius: 50px;
   padding: 4px;
   gap: var(--cell-gap);
   z-index: 100;
-}
 
-/* Style for individual ship segments */
-.ship-segment {
-  height: calc(var(--cell-size) - var(--cell-gap));
-  width: calc(var(--cell-size));
-  background-color: #fff;
-
-  /* Add a border radius to the first and last segment */
-  &:first-child {
-    border-top-left-radius: 50%;
-    border-bottom-left-radius: 50%;
+  .ship-segment {
+    background-color: #fff;
   }
 
-  &:last-child {
-    border-top-right-radius: 50%;
-    border-bottom-right-radius: 50%;
+  &[data-ship-direction="horizontal"] {
+    .ship-segment {
+      height: calc(var(--cell-size) - var(--cell-gap));
+      width: calc(var(--cell-size));
+      &:first-child {
+        border-top-left-radius: 50%;
+        border-bottom-left-radius: 50%;
+      }
+
+      &:last-child {
+        border-top-right-radius: 50%;
+        border-bottom-right-radius: 50%;
+      }
+    }
+  }
+
+  /* vertical dataset-direction */
+  &[data-ship-direction="vertical"] {
+    flex-direction: column;
+    .ship-segment {
+      height: calc(var(--cell-size));
+      width: calc(var(--cell-size) - var(--cell-gap));
+      &:first-child {
+        border-top-left-radius: 50%;
+        border-top-right-radius: 50%;
+      }
+
+      &:last-child {
+        border-bottom-left-radius: 50%;
+        border-bottom-right-radius: 50%;
+      }
+    }
   }
 }
 

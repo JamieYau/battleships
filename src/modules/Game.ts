@@ -23,10 +23,11 @@ export default class Game {
 
   constructor(playerName: string, gameboard: Gameboard) {
     this.#player = new Player(playerName, gameboard);
+    this.#player.ships = Game.#DEFAULT_SHIPS;
     this.#ai = new AI();
+    this.#ai.setupShips(Game.#DEFAULT_SHIPS);
     this.#currentPlayer = this.#player;
     this.#winner = null;
-    this.#ai.setupShips(Game.#DEFAULT_SHIPS);
   }
 
   get currentPlayer() {
