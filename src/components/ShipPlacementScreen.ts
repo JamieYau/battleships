@@ -46,9 +46,14 @@ export function showShipPlacementScreen(playerName: string): void {
   const template = `
     <div id="placement-container">
         <h1>Place Your Ships ${playerName}</h1>
+        <div id="placement-actions" class="btn-container">
         <button id="rotate-btn">
             <i class="fa-solid fa-rotate-right"></i>
         </button>
+        <button id="clear-btn">
+            <i class="fa-solid fa-trash-alt"></i>
+        </button>
+        </div>
         <div id="placement-grid" class="grid-container">
             ${generateGridCells()}
         </div>

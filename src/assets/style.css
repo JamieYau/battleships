@@ -107,9 +107,14 @@ button:focus-visible {
     margin-bottom: 1em;
   }
 
-  #rotate-btn {
+  #placement-actions {
+    display: flex;
+    gap: 1em;
     margin-bottom: 1em;
-    padding: 0.6em;
+
+    > button {
+      padding: 0.6em;
+    }
   }
 }
 
