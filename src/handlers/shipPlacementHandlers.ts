@@ -188,25 +188,6 @@ export function handleDrop(
     `[data-row="${row}"][data-col="${col}"]`
   ) as HTMLElement;
   firstCell.appendChild(shipItem);
-
-  // Position the ship-item within the cell container
-  shipItem.style.position = "absolute";
-  const styles = window.getComputedStyle(
-    document.querySelector("#placement-grid")!
-  );
-  if (shipDirection == "horizontal") {
-    shipItem.style.top = `-${
-      parseInt(styles.getPropertyValue("grid-gap"))! / 2
-    }px`;
-    shipItem.style.left = `-${parseInt(
-      styles.getPropertyValue("grid-gap")
-    )!}px`;
-  } else {
-    shipItem.style.top = `-${parseInt(styles.getPropertyValue("grid-gap"))!}px`;
-    shipItem.style.left = `-${
-      parseInt(styles.getPropertyValue("grid-gap"))! / 2
-    }px`;
-  }
 }
 
 export function handleRotate(shipId: string, game: Game): void {

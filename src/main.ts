@@ -41,7 +41,6 @@ form.addEventListener("submit", (event) => {
   shipItems.forEach((shipItem) => {
     shipItem.addEventListener("click", () => {
       shipInfo = { shipId: shipItem.dataset.id!, segmentIndex: null };
-      console.log(shipInfo);
     });
     const segments = shipItem.querySelectorAll(
       ".ship-segment"
@@ -73,7 +72,6 @@ form.addEventListener("submit", (event) => {
     cell.addEventListener("drop", (e: DragEvent) => {
       if (!shipInfo) return;
       handleDrop(e, shipInfo, game);
-      shipInfo = null;
     });
   });
 

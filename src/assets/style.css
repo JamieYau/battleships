@@ -143,6 +143,20 @@ button:focus-visible {
   &.ship {
     background-color: #2259b7;
   }
+
+  > .ship-item {
+    position: absolute;
+
+    &[data-ship-direction="horizontal"] {
+      top: calc(var(--cell-gap) * -0.5);
+      left: calc(var(--cell-gap) * -1);
+    }
+
+    &[data-ship-direction="vertical"] {
+      top: calc(var(--cell-gap) * -1);
+      left: calc(var(--cell-gap) * -0.5);
+    }
+  }
 }
 
 /* Style for the ship list */
