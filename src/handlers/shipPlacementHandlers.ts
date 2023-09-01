@@ -168,39 +168,44 @@ export function handleDrop(
   const { shipDirection, row, col } = calculatePlacement(shipInfo, targetCell);
 
   const ship = game.player.ships.find((s) => s.id === shipInfo.shipId)!;
-  if (game.player.gameboard.placeShip(ship, row, col, shipDirection)) {
-    // Remove the ship-item from its original container
-    const shipItem = document.querySelector(
-      `[data-id="${shipInfo.shipId}"]`
-    ) as HTMLElement;
-    shipItem?.remove();
+  let result: boolean = false;
+  if (game.player.gameboard.ships.includes(ship)) {
+    result = game.player.gameboard.moveShip(ship.id, row, col, shipDirection);
+  } else if (game.player.gameboard.placeShip(ship, row, col, shipDirection)) {
+    result = true;
+  }
+  if (!result) {
+    return;
+  }
+  // Remove the ship-item from its original container
+  const shipItem = document.querySelector(
+    `[data-id="${shipInfo.shipId}"]`
+  ) as HTMLElement;
+  shipItem?.remove();
 
-    // Append the ship-item to the new cell's container
-    const firstCell = document.querySelector(
-      `[data-row="${row}"][data-col="${col}"]`
-    ) as HTMLElement;
-    firstCell.appendChild(shipItem);
+  // Append the ship-item to the new cell's container
+  const firstCell = document.querySelector(
+    `[data-row="${row}"][data-col="${col}"]`
+  ) as HTMLElement;
+  firstCell.appendChild(shipItem);
 
-    // Position the ship-item within the cell container
-    shipItem.style.position = "absolute";
-    const styles = window.getComputedStyle(
-      document.querySelector("#placement-grid")!
-    );
-    if (shipDirection == "horizontal") {
-      shipItem.style.top = `-${
-        parseInt(styles.getPropertyValue("grid-gap"))! / 2
-      }px`;
-      shipItem.style.left = `-${parseInt(
-        styles.getPropertyValue("grid-gap")
-      )!}px`;
-    } else {
-      shipItem.style.top = `-${parseInt(
-        styles.getPropertyValue("grid-gap")
-      )!}px`;
-      shipItem.style.left = `-${
-        parseInt(styles.getPropertyValue("grid-gap"))! / 2
-      }px`;
-    }
+  // Position the ship-item within the cell container
+  shipItem.style.position = "absolute";
+  const styles = window.getComputedStyle(
+    document.querySelector("#placement-grid")!
+  );
+  if (shipDirection == "horizontal") {
+    shipItem.style.top = `-${
+      parseInt(styles.getPropertyValue("grid-gap"))! / 2
+    }px`;
+    shipItem.style.left = `-${parseInt(
+      styles.getPropertyValue("grid-gap")
+    )!}px`;
+  } else {
+    shipItem.style.top = `-${parseInt(styles.getPropertyValue("grid-gap"))!}px`;
+    shipItem.style.left = `-${
+      parseInt(styles.getPropertyValue("grid-gap"))! / 2
+    }px`;
   }
 }
 
