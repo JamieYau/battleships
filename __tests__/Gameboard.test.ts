@@ -279,5 +279,16 @@ describe("Gameboard Class", () => {
       expect(gameboard.board[0][2].hasShip).toBe(true);
       expect(gameboard.board[0][3].hasShip).toBe(true);
     });
+
+    it("can rotate ship", () => {
+      const ship = new Ship(2);
+      gameboard.placeShip(ship, 0, 0, "horizontal");
+      gameboard.moveShip(ship.id, 0, 0, "vertical");
+      expect(ship.coords).toEqual([
+        [0, 0],
+        [1, 0],
+      ]);
+      expect(ship.coords.length).toBe(2);
+    })
   });
 });

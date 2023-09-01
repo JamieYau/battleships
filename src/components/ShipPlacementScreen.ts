@@ -1,4 +1,3 @@
-import { Game } from "../modules/Game";
 import Ship from "../modules/Ship";
 
 function generateGridCells(): string {
@@ -30,16 +29,15 @@ function generateShip(ship: Ship): HTMLDivElement {
   return shipItem;
 }
 
-function generateShipList(): void {
-  const shipList = Game.shipList;
+function generateShipList(playerShips: Ship[]): void {
   const shipListContainer = document.getElementById("ship-list")!;
-  shipList.forEach((ship) => {
+  playerShips.forEach((ship) => {
     const shipItem = generateShip(ship);
     shipListContainer.appendChild(shipItem);
   });
 }
 
-export function showShipPlacementScreen(playerName: string): void {
+export function showShipPlacementScreen(playerName: string, playerShips: Ship[]): void {
   const container = document.getElementById("app");
   if (!container) return;
 
@@ -61,5 +59,5 @@ export function showShipPlacementScreen(playerName: string): void {
     </div>
   `;
   container.innerHTML = template;
-  generateShipList();
+  generateShipList(playerShips);
 }

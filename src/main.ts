@@ -29,8 +29,9 @@ form.addEventListener("submit", (event) => {
   }
 
   const game = new Game(playerName, new Gameboard());
+  const player = game.player;
   // Show the ship placement screen UI
-  showShipPlacementScreen(playerName);
+  showShipPlacementScreen(playerName, player.ships);
 
   let shipInfo: { shipId: string; segmentIndex: number | null } | null = null; // Declare shipInfo outside of the event listeners
 
@@ -71,7 +72,7 @@ form.addEventListener("submit", (event) => {
     });
     cell.addEventListener("drop", (e: DragEvent) => {
       if (!shipInfo) return;
-      handleDrop(e, shipInfo, game);
+      handleDrop(e, shipInfo, player);
     });
   });
 
@@ -79,7 +80,7 @@ form.addEventListener("submit", (event) => {
   const rotateBtn = document.getElementById("rotate-btn") as HTMLButtonElement;
   rotateBtn.addEventListener("click", () => {
     if (shipInfo?.shipId != undefined) {
-      handleRotate(shipInfo?.shipId, game);
+      handleRotate(shipInfo?.shipId, player);
     }
   });
 });

@@ -1,4 +1,4 @@
-import Game from "../modules/Game";
+import Player from "../modules/Player";
 import Ship from "../modules/Ship";
 import { Direction } from "../types";
 
@@ -151,7 +151,7 @@ export function handleShipDragEnd(segment: HTMLElement, shipItem: HTMLElement) {
 export function handleDrop(
   event: DragEvent,
   shipInfo: { shipId: string; segmentIndex: number | null },
-  game: Game
+  player: Player
 ) {
   event.preventDefault();
   // Remove the 'drag-over' class from all cells
@@ -167,11 +167,11 @@ export function handleDrop(
 
   const { shipDirection, row, col } = calculatePlacement(shipInfo, targetCell);
 
-  const ship = game.player.ships.find((s) => s.id === shipInfo.shipId)!;
+  const ship = player.ships.find((s) => s.id === shipInfo.shipId)!;
   let result: boolean = false;
-  if (game.player.gameboard.ships.includes(ship)) {
-    result = game.player.gameboard.moveShip(ship.id, row, col, shipDirection);
-  } else if (game.player.gameboard.placeShip(ship, row, col, shipDirection)) {
+  if (player.gameboard.ships.includes(ship)) {
+    result = player.gameboard.moveShip(ship.id, row, col, shipDirection);
+  } else if (player.gameboard.placeShip(ship, row, col, shipDirection)) {
     result = true;
   }
   if (!result) {
@@ -190,18 +190,30 @@ export function handleDrop(
   firstCell.appendChild(shipItem);
 }
 
-export function handleRotate(shipId: string, game: Game): void {
+export function handleRotate(shipId: string, player: Player): void {
   //change the direction on html element
   const shipItem = document.querySelector(
     `[data-id="${shipId}"]`
   ) as HTMLDivElement;
-  const ship = game.player.ships.find((s) => s.id === shipId) as Ship;
+  const ship = player.ships.find((s) => s.id === shipId) as Ship;
   const shipDirection = shipItem.dataset.shipDirection as Direction;
-  if (shipDirection === "horizontal") {
-    shipItem.dataset.shipDirection = "vertical";
-    ship.direction = "vertical";
-  } else {
-    shipItem.dataset.shipDirection = "horizontal";
-    ship.direction = "horizontal";
+  const newDirection =
+    shipDirection === "horizontal" ? "vertical" : "horizontal";
+  if (player.gameboard.ships.includes(ship)) {
+    if (
+      player.gameboard.moveShip(
+        ship.id,
+        ship.coords[0][0],
+        ship.coords[0][1],
+        newDirection
+      )
+    ) {
+      shipItem.dataset.shipDirection = newDirection;
+      ship.direction = newDirection;
+    }
+    return;
   }
+
+  shipItem.dataset.shipDirection = newDirection;
+  ship.direction = newDirection;
 }
