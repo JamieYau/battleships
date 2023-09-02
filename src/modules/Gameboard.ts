@@ -210,12 +210,15 @@ export default class Gameboard {
   }
 
   reset() {
+    this.#ships.forEach((ship) => {
+      ship.direction = "horizontal";
+      this.removeShip(ship);
+    });
     this.#board = Array.from({ length: 10 }, () =>
       Array.from({ length: 10 }, () => ({
         hasShip: false,
         state: "no attempt",
       }))
     );
-    this.#ships = [];
   }
 }

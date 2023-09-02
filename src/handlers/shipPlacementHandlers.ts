@@ -2,6 +2,24 @@ import Player from "../modules/Player";
 import Ship from "../modules/Ship";
 import { Direction } from "../types";
 
+export function handleClearBoard(player: Player, gridCells: NodeListOf<Element>) {
+  const shipList = document.getElementById("ship-list") as HTMLDivElement;
+  player.gameboard.reset();
+  gridCells.forEach((cell) => {
+    const shipItem = cell.querySelector(".ship-item") as HTMLDivElement;
+
+    // If a ship item is found in the cell
+    if (shipItem) {
+      // Remove it from the cell
+      cell.removeChild(shipItem);
+
+      // Append it back to the shipList container
+      shipItem.dataset.shipDirection = "horizontal";
+      shipList.appendChild(shipItem);
+    }
+  });
+}
+
 export function handleSegmentMouseDown(event: MouseEvent) {
   return event.target as HTMLElement;
 }

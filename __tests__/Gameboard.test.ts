@@ -289,6 +289,18 @@ describe("Gameboard Class", () => {
         [1, 0],
       ]);
       expect(ship.coords.length).toBe(2);
-    })
+    });
+  });
+  describe("reset", () => {
+    it("resets the board", () => {
+      const ship = new Ship(2);
+      gameboard.placeShip(ship, 0, 0, "horizontal");
+      gameboard.receiveAttack(0, 0);
+      gameboard.reset();
+      expect(gameboard.board[0][0].hasShip).toBe(false);
+      expect(gameboard.board[0][0].state).toBe("no attempt");
+      expect(ship.coords.length).toBe(0);
+      expect(gameboard.ships.length).toBe(0);
+    });
   });
 });

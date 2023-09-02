@@ -11,6 +11,7 @@ import {
   handleDrop,
   handleDragLeave,
   handleRotate,
+  handleClearBoard,
 } from "./handlers/shipPlacementHandlers";
 
 showStartScreen();
@@ -21,7 +22,7 @@ form.addEventListener("submit", (event) => {
   const playerNameInput = document.getElementById(
     "player-name"
   ) as HTMLInputElement;
-  let playerName = playerNameInput.value.trim(); // Remove leading/trailing whitespace
+  let playerName = playerNameInput.value.trim();
 
   // If the player name is empty, set it to "Player"
   if (!playerName) {
@@ -33,12 +34,22 @@ form.addEventListener("submit", (event) => {
   // Show the ship placement screen UI
   showShipPlacementScreen(playerName, player.ships);
 
-  let shipInfo: { shipId: string; segmentIndex: number | null } | null = null; // Declare shipInfo outside of the event listeners
+  let shipInfo: { shipId: string; segmentIndex: number | null } | null = null;
 
-  // Attach event listeners for ship items
   const shipItems = document.querySelectorAll(
     ".ship-item"
   ) as NodeListOf<HTMLDivElement>;
+  const gridCells = document.querySelectorAll(
+    ".grid-cell"
+  ) as NodeListOf<HTMLDivElement>;
+
+  // Clear board btn
+  const clearShipsBtn = document.getElementById("clear-btn");
+  clearShipsBtn?.addEventListener("click", () => {
+    handleClearBoard(player, gridCells)
+  });
+
+  // Attach event listeners for ship items
   shipItems.forEach((shipItem) => {
     shipItem.addEventListener("click", () => {
       shipInfo = { shipId: shipItem.dataset.id!, segmentIndex: null };
@@ -59,9 +70,6 @@ form.addEventListener("submit", (event) => {
   });
 
   // Attach event listeners for grid cells
-  const gridCells = document.querySelectorAll(
-    ".grid-cell"
-  ) as NodeListOf<HTMLDivElement>;
   gridCells.forEach((cell) => {
     cell.addEventListener("dragover", (e: DragEvent) => {
       if (!shipInfo) return;
