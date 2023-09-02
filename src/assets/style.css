@@ -15,7 +15,7 @@
 
   --primary-color: #646cff; /* Your primary color */
   --secondary-color: #1a1a1a; /* Your secondary color */
-  --tertiary-color: #535bf2; /* Your tertiary color */
+  --tertiary-color: #343eff; /* Your tertiary color */
 
   --doc-height: 100%;
   --cell-size: 30px;
@@ -178,7 +178,7 @@ button {
 .ship-item {
   display: inline-flex;
   align-items: center;
-  background-color: var(--primary-color);
+  background-color: var(--tertiary-color);
   border-radius: 50px;
   padding: 4px;
   margin-right: 10px;
@@ -226,6 +226,23 @@ button {
         border-bottom-right-radius: 50%;
       }
     }
+  }
+}
+
+#start-btn {
+  background-color: var(--primary-color);
+  color: #fff;
+  border: 1px solid transparent;
+  transition: all 0.25s ease-in-out;
+
+  &:hover {
+    background-color: #fff;
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+  }
+
+  &:active {
+    transform: scale(0.9);
   }
 }
 
