@@ -56,6 +56,7 @@ export function showShipPlacementScreen(playerName: string, playerShips: Ship[])
             ${generateGridCells()}
         </div>
         <div id="ship-list"></div>
+        <button id="start-btn" class="hidden">Start Game</button>
     </div>
   `;
   container.innerHTML = template;

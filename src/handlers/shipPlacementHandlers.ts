@@ -29,6 +29,10 @@ export function handleClearBoard(player: Player) {
   sortedShipItems.forEach((shipItem) => {
     shipList.appendChild(shipItem);
   });
+
+  // Hide the start button
+  const startBtn = document.getElementById("start-btn") as HTMLButtonElement;
+  startBtn.classList.add("hidden");
 }
 
 export function addActiveClass(shipItem: HTMLElement) {
@@ -216,6 +220,10 @@ export function handleDrop(
   }
   if (!result) {
     return;
+  }
+  if (player.ships.length === player.gameboard.ships.length) {
+    const startBtn = document.getElementById("start-btn") as HTMLButtonElement;
+    startBtn.classList.remove("hidden");
   }
   // Remove the ship-item from its original container
   const shipItem = document.querySelector(
