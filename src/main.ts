@@ -46,7 +46,7 @@ form.addEventListener("submit", (event) => {
   // Clear board btn
   const clearShipsBtn = document.getElementById("clear-btn");
   clearShipsBtn?.addEventListener("click", () => {
-    handleClearBoard(player, gridCells)
+    handleClearBoard(player)
   });
 
   // Attach event listeners for ship items
