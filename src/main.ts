@@ -12,6 +12,7 @@ import {
   handleDragLeave,
   handleRotate,
   handleClearBoard,
+  addActiveClass,
 } from "./handlers/shipPlacementHandlers";
 
 showStartScreen();
@@ -46,17 +47,20 @@ form.addEventListener("submit", (event) => {
   // Clear board btn
   const clearShipsBtn = document.getElementById("clear-btn");
   clearShipsBtn?.addEventListener("click", () => {
-    handleClearBoard(player)
+    handleClearBoard(player);
   });
 
   // Attach event listeners for ship items
   shipItems.forEach((shipItem) => {
     shipItem.addEventListener("click", () => {
       shipInfo = { shipId: shipItem.dataset.id!, segmentIndex: null };
+      addActiveClass(shipItem);
     });
+
     const segments = shipItem.querySelectorAll(
       ".ship-segment"
     ) as NodeListOf<HTMLDivElement>;
+
     segments.forEach((segment) => {
       segment.addEventListener("mousedown", () => {
         shipItem.addEventListener("dragstart", () => {

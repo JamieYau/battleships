@@ -177,6 +177,10 @@ button:focus-visible {
   gap: var(--cell-gap);
   z-index: 100;
 
+  &.active {
+    box-shadow: 0px 0px 15px 5px rgba(25, 17, 254, 0.75);
+  }
+
   .ship-segment {
     background-color: #fff;
   }

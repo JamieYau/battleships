@@ -2,17 +2,19 @@ import Player from "../modules/Player";
 import Ship from "../modules/Ship";
 import { Direction } from "../types";
 
-export function handleClearBoard(
-  player: Player,
-) {
+export function handleClearBoard(player: Player) {
   const shipList = document.getElementById("ship-list") as HTMLDivElement;
   player.gameboard.reset();
 
   // Select all ship items
-  const shipItems = document.querySelectorAll(".ship-item") as NodeListOf<HTMLDivElement>;
+  const shipItems = document.querySelectorAll(
+    ".ship-item"
+  ) as NodeListOf<HTMLDivElement>;
 
   // Remove all ship items from their parent elements
   shipItems.forEach((shipItem) => {
+    shipItem.classList.remove("active");
+    shipItem.dataset.shipDirection = "horizontal";
     shipItem.parentElement?.removeChild(shipItem);
   });
 
@@ -25,9 +27,18 @@ export function handleClearBoard(
 
   // Append the sorted ship items back to the shipList container
   sortedShipItems.forEach((shipItem) => {
-    shipItem.dataset.shipDirection = "horizontal";
     shipList.appendChild(shipItem);
   });
+}
+
+export function addActiveClass(shipItem: HTMLElement) {
+  const shipItems = document.querySelectorAll(
+    ".ship-item"
+  ) as NodeListOf<HTMLDivElement>;
+  shipItems.forEach((item) => {
+    item.classList.remove("active");
+  });
+  shipItem.classList.add("active");
 }
 
 export function handleSegmentMouseDown(event: MouseEvent) {
@@ -40,6 +51,7 @@ export function handleShipDragStart(
 ) {
   segment.classList.add("dragging");
   shipItem.classList.add("dragging");
+  addActiveClass(shipItem);
 
   const segmentIndex = parseInt(segment.dataset.index || "");
   const shipId = shipItem.dataset.id || "";
