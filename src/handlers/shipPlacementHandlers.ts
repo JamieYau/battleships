@@ -2,9 +2,16 @@ import Player from "../modules/Player";
 import Ship from "../modules/Ship";
 import { Direction } from "../types";
 
-export function handleClearBoard(player: Player, gridCells: NodeListOf<Element>) {
+export function handleClearBoard(
+  player: Player,
+  gridCells: NodeListOf<Element>
+) {
   const shipList = document.getElementById("ship-list") as HTMLDivElement;
   player.gameboard.reset();
+
+  // Create an array to store ship items in their original order
+  const originalShipOrder: HTMLElement[] = [];
+
   gridCells.forEach((cell) => {
     const shipItem = cell.querySelector(".ship-item") as HTMLDivElement;
 
@@ -13,10 +20,22 @@ export function handleClearBoard(player: Player, gridCells: NodeListOf<Element>)
       // Remove it from the cell
       cell.removeChild(shipItem);
 
-      // Append it back to the shipList container
-      shipItem.dataset.shipDirection = "horizontal";
-      shipList.appendChild(shipItem);
+      // Push it into the originalShipOrder array
+      originalShipOrder.push(shipItem);
     }
+  });
+
+  // Sort the ship items based on their length (largest to smallest)
+  originalShipOrder.sort((a, b) => {
+    const lengthA = parseInt(a.dataset.shipLength || "0");
+    const lengthB = parseInt(b.dataset.shipLength || "0");
+    return lengthB - lengthA;
+  });
+
+  // Append the sorted ship items back to the shipList container
+  originalShipOrder.forEach((shipItem) => {
+    shipItem.dataset.shipDirection = "horizontal";
+    shipList.appendChild(shipItem);
   });
 }
 
