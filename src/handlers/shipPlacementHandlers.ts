@@ -14,6 +14,7 @@ export function handleClearBoard(player: Player) {
   // Remove all ship items from their parent elements
   shipItems.forEach((shipItem) => {
     shipItem.classList.remove("active");
+    document.getElementById("rotate-btn")?.classList.remove("active");
     shipItem.dataset.shipDirection = "horizontal";
     shipItem.parentElement?.removeChild(shipItem);
   });
@@ -43,6 +44,7 @@ export function addActiveClass(shipItem: HTMLElement) {
     item.classList.remove("active");
   });
   shipItem.classList.add("active");
+  document.getElementById("rotate-btn")?.classList.add("active");
 }
 
 export function handleSegmentMouseDown(event: MouseEvent) {
