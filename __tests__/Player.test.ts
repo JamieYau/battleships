@@ -21,7 +21,32 @@ describe("Player", () => {
       expect(player.gameboard).toBe(gameboard);
     });
   });
-  
+
+  describe("randomizeGameboard", () => {
+    it("Should place ships randomly on the gameboard", () => {
+      const ship = new Ship(3);
+      player.ships.push(ship);
+      player.randomizeGameboard();
+
+      expect(player.gameboard.ships.length).toBe(1);
+    });
+
+    it("Should place all ships on the gameboard", () => {
+      const ships = [
+        new Ship(5),
+        new Ship(4),
+        new Ship(3),
+        new Ship(2),
+        new Ship(2),
+        new Ship(1),
+      ];
+      player.ships = ships;
+      player.randomizeGameboard();
+
+      expect(player.gameboard.ships.length).toBe(6);
+    });
+  });
+
   describe("takeTurn", () => {
     it("Should take turns and attack enemy gameboard", () => {
       const enemyGameboard = new Gameboard();
@@ -57,6 +82,6 @@ describe("Player", () => {
 
       expect(player.takeTurn(enemyGameboard, 2, 2)).toBe(false);
       expect(attackSpy).toHaveBeenCalledTimes(2);
-    })
+    });
   });
 });

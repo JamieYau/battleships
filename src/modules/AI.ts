@@ -1,6 +1,5 @@
 import Gameboard from "./Gameboard";
 import Player from "./Player";
-import Ship from "./Ship";
 
 export default class AI extends Player {
   static #AI_NAME = "AI";
@@ -13,24 +12,6 @@ export default class AI extends Player {
     for (let row = 0; row < Gameboard.BOARDSIZE; row++) {
       for (let col = 0; col < Gameboard.BOARDSIZE; col++) {
         this.#availableMoves.push([row, col]);
-      }
-    }
-  }
-
-  setupShips(ships: Ship[]) {
-    for (const ship of ships) {
-      let isValidPlacement = false;
-      while (!isValidPlacement) {
-        const randomRow = Math.floor(Math.random() * Gameboard.BOARDSIZE);
-        const randomCol = Math.floor(Math.random() * Gameboard.BOARDSIZE);
-        const randomDirection = Math.random() < 0.5 ? "horizontal" : "vertical";
-
-        isValidPlacement = this.gameboard.placeShip(
-          ship,
-          randomRow,
-          randomCol,
-          randomDirection
-        );
       }
     }
   }

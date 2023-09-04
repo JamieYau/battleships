@@ -25,7 +25,8 @@ export default class Game {
     this.#player = new Player(playerName, gameboard);
     this.#player.ships = playerShips;
     this.#ai = new AI();
-    this.#ai.setupShips(aiShips);
+    this.#ai.ships = aiShips;
+    this.#ai.randomizeGameboard();
     this.#currentPlayer = this.#player;
     this.#winner = null;
   }

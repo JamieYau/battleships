@@ -27,6 +27,24 @@ export default class Player {
     return this.#ships;
   }
 
+  randomizeGameboard() {
+    for (const ship of this.ships) {
+      let isValidPlacement = false;
+      while (!isValidPlacement) {
+        const randomRow = Math.floor(Math.random() * Gameboard.BOARDSIZE);
+        const randomCol = Math.floor(Math.random() * Gameboard.BOARDSIZE);
+        const randomDirection = Math.random() < 0.5 ? "horizontal" : "vertical";
+
+        isValidPlacement = this.gameboard.placeShip(
+          ship,
+          randomRow,
+          randomCol,
+          randomDirection
+        );
+      }
+    }
+  }
+
   takeTurn(enemyGameboard: Gameboard, row: number, col: number): boolean {
     if (enemyGameboard.allSunk()) {
       return false;

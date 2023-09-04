@@ -62,7 +62,8 @@ describe("AI", () => {
         new Ship(2),
         new Ship(1),
       ];
-      ai.setupShips(ships);
+      ai.ships = ships;
+      ai.randomizeGameboard();
       // Calculate the total number of cells occupied by ships
       const totalOccupiedCells = ships.reduce(
         (total, ship) => total + ship.length,

@@ -38,21 +38,9 @@ export function handleClearBoard(player: Player) {
 
 export function randomGameboard(player: Player) {
   handleClearBoard(player);
-  const ships = player.ships;
-  for (const ship of ships) {
-    let isValidPlacement = false;
-    while (!isValidPlacement) {
-      const randomRow = Math.floor(Math.random() * 10);
-      const randomCol = Math.floor(Math.random() * 10);
-      const randomDirection = Math.random() < 0.5 ? "horizontal" : "vertical";
-
-      isValidPlacement = player.gameboard.placeShip(
-        ship,
-        randomRow,
-        randomCol,
-        randomDirection
-      );
-    }
+  player.randomizeGameboard();
+  const ships = player.gameboard.ships;
+  ships.forEach((ship) => {
     // place in DOM
     const shipItem = document.querySelector(
       `[data-id="${ship.id}"]`
@@ -62,7 +50,8 @@ export function randomGameboard(player: Player) {
       `[data-row="${ship.coords[0][0]}"][data-col="${ship.coords[0][1]}"]`
     ) as HTMLDivElement;
     firstCell.appendChild(shipItem);
-  }
+  });
+
   const startBtn = document.getElementById("start-btn") as HTMLButtonElement;
   startBtn.classList.remove("hidden");
 }
