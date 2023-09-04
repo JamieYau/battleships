@@ -14,6 +14,7 @@ import {
   handleClearBoard,
   addActiveClass,
 } from "./handlers/shipPlacementHandlers";
+import { renderGameScreen } from "./components/GameScreen";
 
 showStartScreen();
 
@@ -94,5 +95,11 @@ form.addEventListener("submit", (event) => {
     if (shipInfo?.shipId != undefined) {
       handleRotate(shipInfo?.shipId, player);
     }
+  });
+
+  // Start game btn
+  const startBtn = document.getElementById("start-btn") as HTMLButtonElement;
+  startBtn.addEventListener("click", () => {
+    renderGameScreen(game);
   });
 });

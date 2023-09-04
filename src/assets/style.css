@@ -246,6 +246,17 @@ button {
   }
 }
 
+/* Game Screen styles */
+
+#game-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2em;
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;

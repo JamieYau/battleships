@@ -52,7 +52,7 @@ export function showShipPlacementScreen(playerName: string, playerShips: Ship[])
             <i class="fa-solid fa-trash-alt"></i>
         </button>
         </div>
-        <div id="placement-grid" class="grid-container">
+        <div id="player-board" class="grid-container">
             ${generateGridCells()}
         </div>
         <div id="ship-list"></div>
