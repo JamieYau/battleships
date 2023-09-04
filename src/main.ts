@@ -112,5 +112,16 @@ form.addEventListener("submit", (event) => {
       shipItem.draggable = false;
     });
     renderGameScreen(game);
+
+    const aiBoard = document.getElementById("ai-board") as HTMLDivElement;
+    const aiGridCells = aiBoard.querySelectorAll(
+      ".grid-cell"
+    ) as NodeListOf<HTMLDivElement>;
+
+    aiGridCells.forEach((cell) => {
+      cell.addEventListener("click", () => {
+        console.log(cell.dataset.row, cell.dataset.col);
+      });
+    });
   });
 });
