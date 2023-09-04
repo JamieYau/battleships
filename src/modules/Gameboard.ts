@@ -177,6 +177,7 @@ export default class Gameboard {
       const col = direction === "horizontal" ? startCol + i : startCol;
       ship.coords.push([row, col]);
     }
+    ship.direction = direction;
   }
 
   receiveAttack(row: number, col: number) {

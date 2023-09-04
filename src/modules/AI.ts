@@ -24,17 +24,13 @@ export default class AI extends Player {
         const randomRow = Math.floor(Math.random() * Gameboard.BOARDSIZE);
         const randomCol = Math.floor(Math.random() * Gameboard.BOARDSIZE);
         const randomDirection = Math.random() < 0.5 ? "horizontal" : "vertical";
-        try {
-          isValidPlacement = this.gameboard.placeShip(
-            ship,
-            randomRow,
-            randomCol,
-            randomDirection
-          );
-        } catch (error) {
-          // Invalid placement, continue to the next iteration
-          continue;
-        }
+
+        isValidPlacement = this.gameboard.placeShip(
+          ship,
+          randomRow,
+          randomCol,
+          randomDirection
+        );
       }
     }
   }

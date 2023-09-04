@@ -266,7 +266,7 @@ describe("Gameboard Class", () => {
       const ship = new Ship(4);
       gameboard.placeShip(ship, 0, 0, "horizontal");
 
-      gameboard.moveShip(ship.id, 0, 9, "horizontal");
+      expect(gameboard.moveShip(ship.id, 9, 9, "vertical")).toBe(false);
 
       expect(ship.coords).toEqual([
         [0, 0],
@@ -274,6 +274,7 @@ describe("Gameboard Class", () => {
         [0, 2],
         [0, 3],
       ]);
+      expect(ship.direction).toBe("horizontal");
       expect(gameboard.board[0][0].hasShip).toBe(true);
       expect(gameboard.board[0][1].hasShip).toBe(true);
       expect(gameboard.board[0][2].hasShip).toBe(true);
@@ -289,6 +290,7 @@ describe("Gameboard Class", () => {
         [1, 0],
       ]);
       expect(ship.coords.length).toBe(2);
+      expect(ship.direction).toBe("vertical");
     });
   });
   describe("reset", () => {

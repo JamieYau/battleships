@@ -37,7 +37,10 @@ function generateShipList(playerShips: Ship[]): void {
   });
 }
 
-export function showShipPlacementScreen(playerName: string, playerShips: Ship[]): void {
+export function showShipPlacementScreen(
+  playerName: string,
+  playerShips: Ship[]
+): void {
   const container = document.getElementById("app");
   if (!container) return;
 
@@ -48,7 +51,10 @@ export function showShipPlacementScreen(playerName: string, playerShips: Ship[])
         <button id="rotate-btn">
             <i class="fa-solid fa-rotate-right"></i>
         </button>
-        <button id="clear-btn">
+        <button id="random-btn" class="active">
+            <i class="fa-solid fa-shuffle"></i>
+        </button>
+        <button id="clear-btn" class="active">
             <i class="fa-solid fa-trash-alt"></i>
         </button>
         </div>

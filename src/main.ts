@@ -13,6 +13,7 @@ import {
   handleRotate,
   handleClearBoard,
   addActiveClass,
+  randomGameboard,
 } from "./handlers/shipPlacementHandlers";
 import { renderGameScreen } from "./components/GameScreen";
 
@@ -44,6 +45,12 @@ form.addEventListener("submit", (event) => {
   const gridCells = document.querySelectorAll(
     ".grid-cell"
   ) as NodeListOf<HTMLDivElement>;
+
+  // Randomize ships btn
+  const randomShipsBtn = document.getElementById("random-btn");
+  randomShipsBtn?.addEventListener("click", () => {
+    randomGameboard(player);
+  });
 
   // Clear board btn
   const clearShipsBtn = document.getElementById("clear-btn");

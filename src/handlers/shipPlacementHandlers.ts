@@ -36,6 +36,37 @@ export function handleClearBoard(player: Player) {
   startBtn.classList.add("hidden");
 }
 
+export function randomGameboard(player: Player) {
+  handleClearBoard(player);
+  const ships = player.ships;
+  for (const ship of ships) {
+    let isValidPlacement = false;
+    while (!isValidPlacement) {
+      const randomRow = Math.floor(Math.random() * 10);
+      const randomCol = Math.floor(Math.random() * 10);
+      const randomDirection = Math.random() < 0.5 ? "horizontal" : "vertical";
+
+      isValidPlacement = player.gameboard.placeShip(
+        ship,
+        randomRow,
+        randomCol,
+        randomDirection
+      );
+    }
+    // place in DOM
+    const shipItem = document.querySelector(
+      `[data-id="${ship.id}"]`
+    ) as HTMLDivElement;
+    shipItem.dataset.shipDirection = ship.direction;
+    const firstCell = document.querySelector(
+      `[data-row="${ship.coords[0][0]}"][data-col="${ship.coords[0][1]}"]`
+    ) as HTMLDivElement;
+    firstCell.appendChild(shipItem);
+  }
+  const startBtn = document.getElementById("start-btn") as HTMLButtonElement;
+  startBtn.classList.remove("hidden");
+}
+
 export function addActiveClass(shipItem: HTMLElement) {
   const shipItems = document.querySelectorAll(
     ".ship-item"
@@ -259,11 +290,9 @@ export function handleRotate(shipId: string, player: Player): void {
       )
     ) {
       shipItem.dataset.shipDirection = newDirection;
-      ship.direction = newDirection;
     }
     return;
   }
 
   shipItem.dataset.shipDirection = newDirection;
-  ship.direction = newDirection;
 }
