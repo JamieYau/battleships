@@ -1,6 +1,6 @@
 import Ship from "../modules/Ship";
 
-function generateGridCells(): string {
+export function generateGridCells(): string {
   let gridCells = "";
   for (let row = 0; row < 10; row++) {
     for (let col = 0; col < 10; col++) {

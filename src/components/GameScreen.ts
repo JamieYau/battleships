@@ -1,4 +1,6 @@
 import Game from "../modules/Game";
+import { generateGridCells } from "./ShipPlacementScreen";
+
 
 export function renderGameScreen(game: Game) {
   const container = document.getElementById("app");
@@ -7,22 +9,18 @@ export function renderGameScreen(game: Game) {
 
   const template = `
         <div id="game-container">
+          <div class="player-container">
+            <h2>${game.player.name}</h2>
             ${playerBoard?.outerHTML}
+          </div>
+          <div class="player-container">
+            <h2>AI</h2>
             <div id="ai-board" class="grid-container">
-                ${generateGridCells()}
+              ${generateGridCells()}
             </div>
+          </div>
         </div>
     `;
 
   container.innerHTML = template;
-}
-
-function generateGridCells(): string {
-  let gridCells = "";
-  for (let row = 0; row < 10; row++) {
-    for (let col = 0; col < 10; col++) {
-      gridCells += `<div class="grid-cell" data-row="${row}" data-col="${col}"></div>`;
-    }
-  }
-  return gridCells;
 }
