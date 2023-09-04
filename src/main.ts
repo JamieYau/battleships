@@ -100,6 +100,10 @@ form.addEventListener("submit", (event) => {
   // Start game btn
   const startBtn = document.getElementById("start-btn") as HTMLButtonElement;
   startBtn.addEventListener("click", () => {
+    shipItems.forEach((shipItem) => {
+      shipItem.classList.remove("active");
+      shipItem.draggable = false;
+    });
     renderGameScreen(game);
   });
 });
