@@ -6,9 +6,12 @@ export default class AI extends Player {
 
   #availableMoves: [number, number][]; // Set to store available moves
 
+  #move: [number, number]; // Set to store moves made
+
   constructor() {
     super(AI.#AI_NAME, new Gameboard());
     this.#availableMoves = [];
+    this.#move = [0, 0];
     for (let row = 0; row < Gameboard.BOARDSIZE; row++) {
       for (let col = 0; col < Gameboard.BOARDSIZE; col++) {
         this.#availableMoves.push([row, col]);
@@ -22,7 +25,6 @@ export default class AI extends Player {
 
     // Remove the chosen move from the available moves array
     this.#availableMoves.splice(randomIndex, 1);
-
     return [row, col];
   }
 
@@ -30,12 +32,16 @@ export default class AI extends Player {
     if (enemyGameboard.allSunk()) {
       return false;
     }
-    const [row, col] = this.generateRandomMove();
+    this.#move = this.generateRandomMove();
     try {
-      enemyGameboard.receiveAttack(row, col);
+      enemyGameboard.receiveAttack(this.#move[0], this.#move[1]);
       return true;
     } catch (error) {
       return false;
     }
+  }
+
+  get move() {
+    return this.#move;
   }
 }

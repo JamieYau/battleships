@@ -103,6 +103,21 @@ describe("Game", () => {
 
       expect(turnResult).toBe(true);
     });
+
+    it("should return false if player tries to attack same spot", () => {
+      const playerName = "John";
+      const gameboard = new Gameboard();
+      gameboard.placeShip(new Ship(2), 0, 0, "horizontal");
+      const game = new Game(playerName, gameboard);
+
+      const [row, col] = [0, 2];
+      expect(game.takeTurn(row, col)).toBe(true);
+      expect(game.currentPlayer).toBe(game.ai);
+      expect(game.takeTurn(row, col)).toBe(true);
+      expect(game.currentPlayer).toBe(game.player);
+      expect(game.takeTurn(row, col)).toBe(false);
+      expect(game.currentPlayer).toBe(game.player);
+    });
   });
 
   describe("checkForWinner", () => {
@@ -112,7 +127,7 @@ describe("Game", () => {
       gameboard.placeShip(new Ship(2), 0, 0, "horizontal");
       const game = new Game(playerName, gameboard);
 
-      game.checkForWinner();
+      expect(game.checkForWinner()).toBe(false);
       expect(game.winner).toBe(null);
 
       // Sink all of the human player's ships
@@ -123,7 +138,7 @@ describe("Game", () => {
         });
       });
 
-      game.checkForWinner();
+      expect(game.checkForWinner()).toBe(true);
       expect(game.winner).toBe(game.ai);
     });
   });

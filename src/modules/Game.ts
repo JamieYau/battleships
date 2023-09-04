@@ -15,12 +15,10 @@ export default class Game {
   static #DEFAULT_SHIP_CONFIG = [5, 4, 3, 2, 2, 1];
 
   constructor(playerName: string, gameboard: Gameboard) {
-     const playerShips = Game.#DEFAULT_SHIP_CONFIG.map(
-       (length) => new Ship(length)
-     );
-     const aiShips = Game.#DEFAULT_SHIP_CONFIG.map(
-       (length) => new Ship(length)
-     );
+    const playerShips = Game.#DEFAULT_SHIP_CONFIG.map(
+      (length) => new Ship(length)
+    );
+    const aiShips = Game.#DEFAULT_SHIP_CONFIG.map((length) => new Ship(length));
 
     this.#player = new Player(playerName, gameboard);
     this.#player.ships = playerShips;
@@ -54,21 +52,26 @@ export default class Game {
 
   takeTurn(row: number, col: number): boolean {
     let turnResult = false;
-    if (this.#currentPlayer instanceof Player) {
+    if (this.#currentPlayer === this.#player) {
       turnResult = this.#player.takeTurn(this.#ai.gameboard, row, col);
     } else {
       turnResult = this.#ai.takeTurn(this.#player.gameboard);
     }
-    this.switchTurn();
+    if (turnResult) {
+      this.switchTurn();
+    }
     return turnResult;
   }
 
-  checkForWinner() {
+  checkForWinner(): boolean {
     if (this.#player.gameboard.allSunk()) {
       this.#winner = this.#ai;
+      return true;
     } else if (this.#ai.gameboard.allSunk()) {
       this.#winner = this.#player;
+      return true;
     }
+    return false;
   }
 
   resetGame() {

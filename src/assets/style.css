@@ -141,6 +141,14 @@ button {
   position: relative;
   cursor: pointer;
 
+  &.miss {
+    background-color: #fff;
+  }
+
+  &.hit {
+    background-color: red;
+  }
+
   &.drag-over {
     background-color: var(--primary-color);
   }

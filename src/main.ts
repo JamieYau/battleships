@@ -16,6 +16,7 @@ import {
   randomGameboard,
 } from "./handlers/shipPlacementHandlers";
 import { renderGameScreen } from "./components/GameScreen";
+import { handleAttack } from "./handlers/gameHandlers";
 
 showStartScreen();
 
@@ -120,7 +121,7 @@ form.addEventListener("submit", (event) => {
 
     aiGridCells.forEach((cell) => {
       cell.addEventListener("click", () => {
-        console.log(cell.dataset.row, cell.dataset.col);
+        handleAttack(game, cell);
       });
     });
   });
