@@ -1,5 +1,7 @@
 import Game from "../modules/Game";
 
+let aiIsTakingTurn = false;
+
 export function handleHover(target: HTMLElement) {
   if (target.hasChildNodes()) {
     target.classList.remove("hover");
@@ -13,27 +15,11 @@ export function handleLeaveCell(target: HTMLElement) {
   target.classList.remove("invalid");
 }
 
-export function handleAttack(game: Game, aiCell: HTMLDivElement) {
-  const row = Number(aiCell.dataset.row);
-  const col = Number(aiCell.dataset.col);
-  let playerTurn = false;
-  while (!playerTurn) {
-    playerTurn = game.takeTurn(row, col);
-  }
-  // mark attack on the grid
-  const result = game.ai.gameboard.board[row][col].state;
-  const aicellState = document.createElement("div");
-  aicellState.classList.add(result);
-  aiCell.appendChild(aicellState);
-  if (game.checkForWinner()) {
-    const winner = game.winner;
-    setTimeout(() => {
-      alert(`${winner?.name} wins!`);
-    }, 100);
-  }
-  handleHover(aiCell);
+function delay(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 
-  // AI Turn
+function aiAttack(game: Game) {
   let aiTurn = false;
   while (!aiTurn) {
     aiTurn = game.takeTurn(0, 0);
@@ -51,5 +37,42 @@ export function handleAttack(game: Game, aiCell: HTMLDivElement) {
   if (game.checkForWinner()) {
     const winner = game.winner;
     alert(`${winner?.name} wins!`);
+  }
+}
+
+export async function handleAttack(game: Game, aiCell: HTMLDivElement) {
+  if (aiIsTakingTurn) {
+    return;
+  }
+  const row = Number(aiCell.dataset.row);
+  const col = Number(aiCell.dataset.col);
+  // Disable user input while the AI is taking its turn
+  aiIsTakingTurn = true;
+
+  try {
+    let playerTurn = false;
+    while (!playerTurn) {
+      playerTurn = game.takeTurn(row, col);
+    }
+
+    // Mark attack on the grid
+    const result = game.ai.gameboard.board[row][col].state;
+    const aicellState = document.createElement("div");
+    aicellState.classList.add(result);
+    aiCell.appendChild(aicellState);
+
+    if (game.checkForWinner()) {
+      const winner = game.winner;
+      setTimeout(() => {
+        alert(`${winner?.name} wins!`);
+      }, 100);
+    }
+    handleHover(aiCell);
+
+    // AI Turn
+    await delay(1000);
+    aiAttack(game);
+  } finally {
+    aiIsTakingTurn = false;
   }
 }
