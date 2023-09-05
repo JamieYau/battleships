@@ -9,10 +9,12 @@ export function handleAttack(game: Game, aiCell: HTMLDivElement) {
   }
   // mark attack on the grid
   const result = game.ai.gameboard.board[row][col].state;
-  aiCell.classList.add(result);
+  const aicellState = document.createElement("div");
+  aicellState.classList.add(result);
+  aiCell.appendChild(aicellState);
   if (game.checkForWinner()) {
     const winner = game.winner;
-    alert(`${winner} wins!`);
+    alert(`${winner?.name} wins!`);
   }
 
   // AI Turn
@@ -26,7 +28,9 @@ export function handleAttack(game: Game, aiCell: HTMLDivElement) {
     `.grid-cell[data-row="${aiRow}"][data-col="${aiCol}"]`
   ) as HTMLDivElement;
   const aiResult = game.player.gameboard.board[aiRow][aiCol].state;
-  playerCell.classList.add(aiResult);
+  const playerCellState = document.createElement("div");
+  playerCellState.classList.add(aiResult);
+  playerCell.appendChild(playerCellState);
 
   if (game.checkForWinner()) {
     const winner = game.winner;

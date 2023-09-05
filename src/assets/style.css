@@ -137,17 +137,12 @@ button {
 .grid-cell {
   width: var(--cell-size);
   height: var(--cell-size);
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background-color: #ccc;
   position: relative;
   cursor: pointer;
-
-  &.miss {
-    background-color: #fff;
-  }
-
-  &.hit {
-    background-color: red;
-  }
 
   &.drag-over {
     background-color: var(--primary-color);
@@ -192,14 +187,14 @@ button {
   margin-right: 10px;
   margin-bottom: 10px;
   gap: var(--cell-gap);
-  z-index: 100;
+  z-index: 1;
 
   &.active {
     box-shadow: 0px 0px 15px 5px rgba(25, 17, 254, 0.75);
   }
 
   .ship-segment {
-    background-color: #fff;
+    background-color: #b8b8b8;
   }
 
   &[data-ship-direction="horizontal"] {
@@ -268,6 +263,29 @@ button {
 #ai-board {
   .grid-cell {
     cursor: crosshair;
+  }
+}
+
+.grid-cell {
+  .miss,
+  .hit {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+    width: 50%;
+    height: 50%;
+    border-radius: 100%;
+  }
+
+  .miss {
+    color: #b63535;
+    background-color: #ffffff;
+  }
+
+  .hit {
+    color: #000000;
+    background-color: #ff563c;
   }
 }
 
