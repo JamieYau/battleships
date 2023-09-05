@@ -1,3 +1,4 @@
+import { renderModalContent } from "../components/GameScreen";
 import Game from "../modules/Game";
 
 let aiIsTakingTurn = false;
@@ -36,7 +37,7 @@ function aiAttack(game: Game) {
 
   if (game.checkForWinner()) {
     const winner = game.winner;
-    alert(`${winner?.name} wins!`);
+    renderModalContent(winner?.name as string);
   }
 }
 
@@ -63,9 +64,7 @@ export async function handleAttack(game: Game, aiCell: HTMLDivElement) {
 
     if (game.checkForWinner()) {
       const winner = game.winner;
-      setTimeout(() => {
-        alert(`${winner?.name} wins!`);
-      }, 100);
+      renderModalContent(winner?.name as string);
     }
     handleHover(aiCell);
 

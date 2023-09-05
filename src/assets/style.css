@@ -55,10 +55,6 @@ button {
   transition: border-color 0.25s;
 }
 
-.hidden {
-  display: none;
-}
-
 #app {
   width: 100%;
   height: 100%;
@@ -260,6 +256,24 @@ button {
   padding: 2em;
 }
 
+@keyframes shake {
+  0% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  50% {
+    transform: translateX(5px);
+  }
+  75% {
+    transform: translateX(-5px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
 #ai-board {
   .grid-cell {
     cursor: crosshair;
@@ -280,6 +294,28 @@ button {
   }
 }
 
+@keyframes ripple {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(5);
+    opacity: 0;
+  }
+}
+
+@keyframes explosion {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
 .grid-cell {
   .miss,
   .hit {
@@ -295,7 +331,6 @@ button {
   .miss {
     background-color: #ffffff;
     animation: ripple 0.5s ease-out;
-    /* animation: shake 0.5s ease-out; */
   }
 
   .hit {
@@ -304,45 +339,58 @@ button {
   }
 }
 
-/* Define the animation */
-@keyframes ripple {
-  0% {
-    transform: scale(1);
-    opacity: 1;
-  }
-  100% {
-    transform: scale(5);
-    opacity: 0;
-  }
-}
-
-@keyframes shake {
-  0% {
-    transform: translateX(0);
-  }
-  25% {
-    transform: translateX(-5px);
-  }
-  50% {
-    transform: translateX(5px);
-  }
-  75% {
-    transform: translateX(-5px);
-  }
-  100% {
-    transform: translateX(0);
-  }
-}
-
-@keyframes explosion {
+@keyframes emerge {
   0% {
     transform: scale(0);
-    opacity: 1;
   }
   100% {
-    transform: scale(2);
-    opacity: 0;
+    transform: scale(1);
   }
+}
+
+/* Modal Styles */
+.modal {
+  display: flex;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  z-index: 100; /* Ensure modal is on top of other content */
+  justify-content: center;
+  align-items: center;
+
+  &:not(.hidden) .modal-content {
+    animation: emerge 0.5s ease-out;
+  }
+}
+
+.modal-content {
+  background-color: var(--secondary-color);
+  padding: 2em;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  text-align: center;
+}
+
+.modal h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+#play-again-btn {
+  background-color: var(--primary-color);
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.hidden {
+  display: none;
 }
 
 @media (prefers-color-scheme: light) {

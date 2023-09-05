@@ -134,5 +134,11 @@ form.addEventListener("submit", (event) => {
         handleLeaveCell(e.target as HTMLElement);
       });
     });
+
+    // Play again btn
+    const playAgainBtn = document.getElementById("play-again-btn");
+    playAgainBtn?.addEventListener("click", () => {
+      window.location.reload();
+    });
   });
 });
