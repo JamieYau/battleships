@@ -263,6 +263,15 @@ button {
 #ai-board {
   .grid-cell {
     cursor: crosshair;
+
+    &.hover {
+      background-color: var(--primary-color);
+    }
+
+    &.invalid {
+      background-color: #fc4e4e;
+      cursor: not-allowed;
+    }
   }
 }
 

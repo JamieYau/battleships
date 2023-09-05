@@ -16,7 +16,11 @@ import {
   randomGameboard,
 } from "./handlers/shipPlacementHandlers";
 import { renderGameScreen } from "./components/GameScreen";
-import { handleAttack } from "./handlers/gameHandlers";
+import {
+  handleAttack,
+  handleHover,
+  handleLeaveCell,
+} from "./handlers/gameHandlers";
 
 showStartScreen();
 
@@ -122,6 +126,12 @@ form.addEventListener("submit", (event) => {
     aiGridCells.forEach((cell) => {
       cell.addEventListener("click", () => {
         handleAttack(game, cell);
+      });
+      cell.addEventListener("mouseenter", (e) => {
+        handleHover(e.target as HTMLElement);
+      });
+      cell.addEventListener("mouseleave", (e) => {
+        handleLeaveCell(e.target as HTMLElement);
       });
     });
   });

@@ -1,5 +1,19 @@
 import Game from "../modules/Game";
 
+export function handleHover(target: HTMLElement) {
+  if (target.hasChildNodes()) {
+    target.classList.remove("hover");
+    target.classList.add("invalid");
+    return;
+  }
+  target.classList.add("hover");
+}
+
+export function handleLeaveCell(target: HTMLElement) {
+  target.classList.remove("hover");
+  target.classList.remove("invalid");
+}
+
 export function handleAttack(game: Game, aiCell: HTMLDivElement) {
   const row = Number(aiCell.dataset.row);
   const col = Number(aiCell.dataset.col);
@@ -16,6 +30,7 @@ export function handleAttack(game: Game, aiCell: HTMLDivElement) {
     const winner = game.winner;
     alert(`${winner?.name} wins!`);
   }
+  handleHover(aiCell);
 
   // AI Turn
   let aiTurn = false;
