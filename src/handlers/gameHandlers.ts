@@ -3,7 +3,6 @@ import Game from "../modules/Game";
 export function handleHover(target: HTMLElement) {
   if (target.hasChildNodes()) {
     target.classList.remove("hover");
-    target.classList.add("invalid");
     return;
   }
   target.classList.add("hover");
@@ -28,7 +27,9 @@ export function handleAttack(game: Game, aiCell: HTMLDivElement) {
   aiCell.appendChild(aicellState);
   if (game.checkForWinner()) {
     const winner = game.winner;
-    alert(`${winner?.name} wins!`);
+    setTimeout(() => {
+      alert(`${winner?.name} wins!`);
+    }, 100);
   }
   handleHover(aiCell);
 
