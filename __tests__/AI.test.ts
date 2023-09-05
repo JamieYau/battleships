@@ -51,4 +51,31 @@ describe("AI", () => {
       expect(attackSpy).toHaveBeenCalled();
     });
   });
+
+  describe("setupShips", () => {
+    it("Should place all ships on the gameboard", () => {
+      const ships = [
+        new Ship(5),
+        new Ship(4),
+        new Ship(3),
+        new Ship(2),
+        new Ship(2),
+        new Ship(1),
+      ];
+      ai.ships = ships;
+      ai.randomizeGameboard();
+      // Calculate the total number of cells occupied by ships
+      const totalOccupiedCells = ships.reduce(
+        (total, ship) => total + ship.length,
+        0
+      );
+      // Count the number of cells with ships on the gameboard
+      const occupiedCellsCount = ai.gameboard.board
+        .flat()
+        .filter((cell) => cell.hasShip).length;
+
+      // Compare the calculated count with the actual count
+      expect(occupiedCellsCount).toBe(totalOccupiedCells);
+    });
+  });
 });
